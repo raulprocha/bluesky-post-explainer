@@ -54,7 +54,6 @@ graph TD
     subgraph Domain
         UC[ExplainPostUseCase]
         P[Ports - Abstract Interfaces]
-        E[Entities - Pure Dataclasses]
     end
 
     subgraph Adapters
