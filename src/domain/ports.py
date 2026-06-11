@@ -35,11 +35,15 @@ class SearchPort(ABC):
     """Port for searching the web for context relevant to a post."""
 
     @abstractmethod
-    async def search(self, post: PostContent) -> list[SearchResult]:
+    async def search(
+        self, post: PostContent, queries: list[str] | None = None
+    ) -> list[SearchResult]:
         """Search for context relevant to a post.
 
         Args:
             post: The extracted post content.
+            queries: Optional pre-computed search queries. If None, the
+                adapter formulates queries from the post.
 
         Returns:
             List of search results.

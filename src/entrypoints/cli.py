@@ -16,6 +16,7 @@ from src.adapters.bluesky_extractor import BlueskyExtractor
 from src.adapters.crossencoder_reranker import CrossEncoderReranker
 from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter
+from src.adapters.query_rewriter import QueryRewriter
 from src.adapters.tavily_searcher import TavilySearcher
 from src.domain.use_cases import ExplainPostUseCase
 from src.domain.exceptions import ExplainerError
@@ -58,12 +59,14 @@ def main() -> None:
     ranker = CrossEncoderReranker()
     llm = LiteLLMRouter()
     explainer = ExplanationGeneratorAdapter(llm=llm)
+    query_rewriter = QueryRewriter(llm=llm, model=args.provider)
 
     use_case = ExplainPostUseCase(
         extractor=extractor,
         searcher=searcher,
         ranker=ranker,
         explainer=explainer,
+        query_rewriter=query_rewriter,
         provider=args.provider,
         verbose=args.verbose,
     )

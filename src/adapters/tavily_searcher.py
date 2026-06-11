@@ -29,11 +29,13 @@ _MAX_RESULTS_PER_QUERY = 5
 class TavilySearcher(SearchPort):
     """Retrieves web context for Bluesky posts using Tavily Search API."""
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: str | None = None, topic: str = "general"):
         """Initialize with Tavily API key.
 
         Args:
             api_key: Tavily API key. If None, reads from TAVILY_API_KEY env var.
+            topic: Tavily search topic. "general" covers both news and
+                encyclopedic context; "news" restricts to journalistic sources.
 
         Raises:
             SearchError: If no API key is available.
@@ -44,6 +46,7 @@ class TavilySearcher(SearchPort):
                 "Tavily API key not found. Set TAVILY_API_KEY environment variable."
             )
         self._client = TavilyClient(api_key=key)
+        self._topic = topic
 
     def formulate_queries(self, post: PostContent) -> list[str]:
         """Generate 1-3 search queries from post text, hashtags, and mentions.
@@ -116,7 +119,7 @@ class TavilySearcher(SearchPort):
                 response = await asyncio.to_thread(
                     self._client.search,
                     query=query,
-                    topic="news",
+                    topic=self._topic,
                     max_results=_MAX_RESULTS_PER_QUERY,
                 )
 
@@ -152,13 +155,17 @@ class TavilySearcher(SearchPort):
             f"Tavily search failed after {_MAX_RETRIES + 1} attempts: {last_exception}"
         )
 
-    async def search(self, post: PostContent) -> list[SearchResult]:
+    async def search(
+        self, post: PostContent, queries: list[str] | None = None
+    ) -> list[SearchResult]:
         """Formulate queries and execute searches, aggregating results.
 
         Deduplicates results by URL across multiple queries.
 
         Args:
             post: Extracted post content.
+            queries: Optional pre-computed search queries (e.g. from an LLM
+                query rewriter). If None, queries are formulated from the post.
 
         Returns:
             Aggregated and deduplicated list of SearchResult objects.
@@ -166,7 +173,7 @@ class TavilySearcher(SearchPort):
         Raises:
             SearchError: If Tavily API fails after retries for any query.
         """
-        queries = self.formulate_queries(post)
+        queries = queries or self.formulate_queries(post)
 
         if not queries:
             logger.warning("No queries formulated for post. Returning empty results.")

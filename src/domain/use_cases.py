@@ -30,6 +30,7 @@ class ExplainPostUseCase:
         searcher: SearchPort,
         ranker: RankerPort,
         explainer: ExplanationPort,
+        query_rewriter=None,
         provider: str | None = None,
         verbose: bool = False,
     ):
@@ -40,6 +41,8 @@ class ExplainPostUseCase:
             searcher: Search port.
             ranker: Reranking port.
             explainer: Explanation generation port.
+            query_rewriter: Optional query rewriter. If provided, the post is
+                rewritten into focused search queries before retrieval.
             provider: Optional LLM provider/model name.
             verbose: If True, store intermediate pipeline data.
         """
@@ -47,6 +50,7 @@ class ExplainPostUseCase:
         self.searcher = searcher
         self.ranker = ranker
         self.explainer = explainer
+        self.query_rewriter = query_rewriter
         self.provider = provider
         self.verbose = verbose
 
@@ -54,13 +58,14 @@ class ExplainPostUseCase:
         self.last_post_content: PostContent | None = None
         self.last_search_results: list[SearchResult] | None = None
         self.last_ranked_contexts: list[RankedContext] | None = None
+        self.last_queries: list[str] | None = None
 
     async def execute(self, url: str) -> ExplanationResult:
         """Run the full explanation pipeline for a post URL.
 
         Pipeline steps:
             1. Extract post content from URL
-            2. Search for relevant web context
+            2. Rewrite into focused search queries (optional) + search web
             3. Rerank results using cross-encoder
             4. Generate explanatory bullets via LLM
 
@@ -77,9 +82,16 @@ class ExplainPostUseCase:
         if self.verbose:
             self.last_post_content = post
 
-        # Step 2: Search for relevant context
+        # Step 2: Rewrite query (optional) then search for relevant context
+        queries = None
+        if self.query_rewriter is not None:
+            logger.info("Rewriting post into focused search queries...")
+            queries = await self.query_rewriter.rewrite(post)
+            if self.verbose:
+                self.last_queries = queries
+
         logger.info("Searching for relevant context...")
-        results = await self.searcher.search(post)
+        results = await self.searcher.search(post, queries=queries)
         if self.verbose:
             self.last_search_results = results
 

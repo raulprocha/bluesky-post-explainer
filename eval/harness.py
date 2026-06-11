@@ -19,6 +19,7 @@ from src.adapters.bluesky_extractor import BlueskyExtractor
 from src.adapters.crossencoder_reranker import CrossEncoderReranker
 from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter as LLMRouter
+from src.adapters.query_rewriter import QueryRewriter
 from src.adapters.tavily_searcher import TavilySearcher
 from eval.judge import score_faithfulness, score_relevance, score_helpfulness
 
@@ -146,11 +147,13 @@ class EvalHarness:
         searcher = TavilySearcher()
         ranker = CrossEncoderReranker() if self._use_crossencoder else _ScoreReranker()
         explainer = ExplanationGeneratorAdapter(llm=LLMRouter())
+        query_rewriter = QueryRewriter(llm=LLMRouter(), model=self.provider)
         use_case = ExplainPostUseCase(
             extractor=extractor,
             searcher=searcher,
             ranker=ranker,
             explainer=explainer,
+            query_rewriter=query_rewriter,
             provider=self.provider,
             verbose=True,
         )

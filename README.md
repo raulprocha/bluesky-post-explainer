@@ -58,6 +58,7 @@ graph TD
     end
 
     subgraph Adapters
+        QR[QueryRewriter] -->|focused queries| LR
         BE[BlueskyExtractor] -->|AT Protocol| BSky[Bluesky Public API]
         TS[TavilySearcher] -->|REST| Tavily[Tavily Search API]
         CR[CrossEncoderReranker] -->|inference| Model[ms-marco-MiniLM-L-6-v2]
@@ -69,6 +70,7 @@ graph TD
     CLI --> UC
     UC --> P
     UC --> E
+    P -.-> QR
     P -.-> BE
     P -.-> TS
     P -.-> CR
@@ -111,6 +113,7 @@ src/
 ├── adapters/            # Concrete implementations of ports
 │   ├── bluesky_extractor.py    # AT Protocol post extraction
 │   ├── tavily_searcher.py      # Tavily web search
+│   ├── query_rewriter.py       # LLM-based search query rewriting
 │   ├── crossencoder_reranker.py # ML reranking (sentence-transformers)
 │   ├── litellm_router.py       # Multi-LLM routing via LiteLLM
 │   └── explanation_generator.py # Bullet generation with citations
@@ -136,19 +139,23 @@ The domain layer defines ports (abstract interfaces) that adapters implement. Th
 
 Instead of waiting for the full pipeline to complete, the backend streams progress events as each stage finishes. The frontend renders results progressively — post content, sources, then bullets one by one. This keeps the UI responsive during the 5-15 second pipeline execution.
 
-### 3. Cross-Encoder Reranking (ML Module)
+### 3. Query Rewriting (Retrieval Quality)
+
+Social media posts are conversational and full of slang, making them poor search queries. Before searching, an LLM rewrites the post into 1-3 focused queries that extract key entities and topics. For example, "Jane Yolen has passed...450 books...the matriarch of children's books" becomes `["Jane Yolen children's author obituary", "Jane Yolen 450 books career"]`. Combined with Tavily's `general` topic (instead of `news`), this dramatically improves retrieval relevance for niche and non-news posts. The rewriter falls back to the raw post text if the LLM call fails.
+
+### 4. Cross-Encoder Reranking (ML Module)
 
 Search results from Tavily are reranked using `cross-encoder/ms-marco-MiniLM-L-6-v2`. Unlike bi-encoders that score query and document independently, cross-encoders process the (query, document) pair jointly through self-attention, producing significantly more accurate relevance judgments. Falls back to Tavily's native scoring when PyTorch is unavailable.
 
-### 4. Multi-LLM Provider Routing
+### 5. Multi-LLM Provider Routing
 
 The LLM Router supports multiple providers (Claude, GPT-4o, Gemini) via LiteLLM's unified interface. It auto-detects which provider to use based on which API key the user provides. If a provider fails, it falls back to the next available one.
 
-### 5. Image Understanding
+### 6. Image Understanding
 
 Posts with embedded images are handled by fetching the image from Bluesky's CDN, detecting the actual MIME type from HTTP response headers, encoding as base64, and passing to a vision-capable model. The LLM sees both the text context and the visual content.
 
-### 6. Per-Request API Keys
+### 7. Per-Request API Keys
 
 API keys are provided by the user in the frontend and sent per-request. They are never stored on the server. This avoids requiring server-side key management while allowing anyone to run the app with their own keys.
 

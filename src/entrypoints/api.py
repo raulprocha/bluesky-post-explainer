@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from src.adapters.bluesky_extractor import BlueskyExtractor
 from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter
+from src.adapters.query_rewriter import QueryRewriter
 from src.adapters.tavily_searcher import TavilySearcher
 from src.domain.entities import RankedContext, SearchResult
 from src.domain.ports import RankerPort
@@ -118,11 +119,13 @@ def _build_use_case(ranker, provider: str | None = None, tavily_key: str | None 
     searcher = TavilySearcher(api_key=tavily_key)
     llm = LiteLLMRouter()
     explainer = ExplanationGeneratorAdapter(llm=llm)
+    query_rewriter = QueryRewriter(llm=llm, model=provider)
     return ExplainPostUseCase(
         extractor=extractor,
         searcher=searcher,
         ranker=ranker,
         explainer=explainer,
+        query_rewriter=query_rewriter,
         provider=provider,
         verbose=True,
     )
@@ -142,9 +145,12 @@ async def _sse_generator(url: str, provider: str | None, ranker, api_keys: ApiKe
         post = await use_case.extractor.extract(url)
         yield f"event: post\ndata: {json.dumps({'author': post.author_handle, 'text': post.text[:200], 'hashtags': post.hashtags})}\n\n"
 
-        # Step 2: Search
+        # Step 2: Rewrite query + search
         yield f"event: status\ndata: {json.dumps({'step': 'searching', 'message': 'Searching for context...'})}\n\n"
-        results = await use_case.searcher.search(post)
+        queries = None
+        if use_case.query_rewriter is not None:
+            queries = await use_case.query_rewriter.rewrite(post)
+        results = await use_case.searcher.search(post, queries=queries)
         sources = [{"title": r.title, "url": r.url} for r in results[:5]]
         yield f"event: sources\ndata: {json.dumps({'sources': sources})}\n\n"
 
