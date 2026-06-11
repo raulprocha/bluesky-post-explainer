@@ -25,7 +25,7 @@ const inputStyle: React.CSSProperties = {
 }
 
 export default function App() {
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState('https://bsky.app/profile/bsky.app/post/3mnzpiackwk25')
   const [status, setStatus] = useState<Status>('idle')
   const [statusMessage, setStatusMessage] = useState('')
   const [post, setPost] = useState<PostInfo | null>(null)

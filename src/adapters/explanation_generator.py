@@ -116,7 +116,9 @@ class ExplanationGeneratorAdapter(ExplanationPort):
                     response = await client.get(img.url)
                     response.raise_for_status()
                     b64_data = base64.b64encode(response.content).decode("utf-8")
-                    mime_type = img.mime_type or "image/jpeg"
+                    # Detect actual MIME type from response headers (CDN may serve webp)
+                    content_type = response.headers.get("content-type", "").split(";")[0].strip()
+                    mime_type = content_type if content_type.startswith("image/") else (img.mime_type or "image/jpeg")
                     image_blocks.append(
                         {
                             "type": "image_url",
