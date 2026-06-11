@@ -74,17 +74,37 @@ app.add_middleware(
 )
 
 
+class ApiKeys(BaseModel):
+    """API keys provided by the user per-request."""
+    anthropic: str | None = None
+    openai: str | None = None
+    tavily: str | None = None
+
+
 class ExplainRequest(BaseModel):
     """Request body for the explain endpoint."""
 
     url: str
     provider: str | None = None
+    api_keys: ApiKeys | None = None
 
 
-def _build_use_case(ranker, provider: str | None = None) -> ExplainPostUseCase:
+def _apply_api_keys(keys: ApiKeys | None) -> None:
+    """Set API keys as environment variables for the current request."""
+    if not keys:
+        return
+    if keys.anthropic:
+        os.environ["ANTHROPIC_API_KEY"] = keys.anthropic
+    if keys.openai:
+        os.environ["OPENAI_API_KEY"] = keys.openai
+    if keys.tavily:
+        os.environ["TAVILY_API_KEY"] = keys.tavily
+
+
+def _build_use_case(ranker, provider: str | None = None, tavily_key: str | None = None) -> ExplainPostUseCase:
     """Build use case with all adapters."""
     extractor = BlueskyExtractor()
-    searcher = TavilySearcher()
+    searcher = TavilySearcher(api_key=tavily_key)
     llm = LiteLLMRouter()
     explainer = ExplanationGeneratorAdapter(llm=llm)
     return ExplainPostUseCase(
@@ -97,9 +117,13 @@ def _build_use_case(ranker, provider: str | None = None) -> ExplainPostUseCase:
     )
 
 
-async def _sse_generator(url: str, provider: str | None, ranker):
+async def _sse_generator(url: str, provider: str | None, ranker, api_keys: ApiKeys | None):
     """Async generator yielding SSE events as the pipeline progresses."""
-    use_case = _build_use_case(ranker, provider)
+    # Apply user-provided API keys to environment
+    _apply_api_keys(api_keys)
+
+    tavily_key = api_keys.tavily if api_keys else None
+    use_case = _build_use_case(ranker, provider, tavily_key=tavily_key)
 
     try:
         # Step 1: Extract post
@@ -147,7 +171,7 @@ async def _sse_generator(url: str, provider: str | None, ranker):
 async def explain_post(request: ExplainRequest):
     """Start explanation pipeline and stream results via SSE."""
     return StreamingResponse(
-        _sse_generator(request.url, request.provider, app.state.ranker),
+        _sse_generator(request.url, request.provider, app.state.ranker, request.api_keys),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",

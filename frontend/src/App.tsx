@@ -13,6 +13,17 @@ interface PostInfo {
 
 type Status = 'idle' | 'extracting' | 'searching' | 'reranking' | 'generating' | 'done' | 'error'
 
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  padding: '0.6rem',
+  borderRadius: '8px',
+  border: '1px solid #334155',
+  background: '#1e293b',
+  color: '#e2e8f0',
+  fontSize: '0.85rem',
+  marginBottom: '0.5rem',
+}
+
 export default function App() {
   const [url, setUrl] = useState('')
   const [status, setStatus] = useState<Status>('idle')
@@ -22,7 +33,13 @@ export default function App() {
   const [bullets, setBullets] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [modelUsed, setModelUsed] = useState('')
-  const [provider, setProvider] = useState('')
+  const [provider, setProvider] = useState('anthropic/claude-sonnet-4-20250514')
+
+  // API Keys (user provides in frontend)
+  const [anthropicKey, setAnthropicKey] = useState('')
+  const [openaiKey, setOpenaiKey] = useState('')
+  const [tavilyKey, setTavilyKey] = useState('')
+  const [showSettings, setShowSettings] = useState(true)
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,7 +58,15 @@ export default function App() {
       const response = await fetch('/api/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim(), provider: provider || null }),
+        body: JSON.stringify({
+          url: url.trim(),
+          provider: provider || null,
+          api_keys: {
+            anthropic: anthropicKey || null,
+            openai: openaiKey || null,
+            tavily: tavilyKey || null,
+          },
+        }),
       })
 
       if (!response.ok) {
@@ -98,7 +123,7 @@ export default function App() {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Unknown error')
     }
-  }, [url, provider])
+  }, [url, provider, anthropicKey, openaiKey, tavilyKey])
 
   const isLoading = !['idle', 'done', 'error'].includes(status)
 
@@ -110,6 +135,57 @@ export default function App() {
       <p style={{ color: '#94a3b8', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
         Paste a Bluesky post URL to get AI-powered context explanation
       </p>
+
+      {/* API Keys Section */}
+      <div style={{ marginBottom: '1rem', padding: '1rem', background: '#1e293b', borderRadius: '8px', border: '1px solid #334155' }}>
+        <div
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+          onClick={() => setShowSettings(!showSettings)}
+        >
+          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>⚙️ API Keys</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{showSettings ? '▼' : '▶'}</span>
+        </div>
+        {showSettings && (
+          <div style={{ marginTop: '0.75rem' }}>
+            <label htmlFor="tavily-key" style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>
+              Tavily API Key (required for search)
+            </label>
+            <input
+              id="tavily-key"
+              type="password"
+              value={tavilyKey}
+              onChange={e => setTavilyKey(e.target.value)}
+              placeholder="tvly-..."
+              style={inputStyle}
+            />
+            <label htmlFor="anthropic-key" style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>
+              Anthropic API Key
+            </label>
+            <input
+              id="anthropic-key"
+              type="password"
+              value={anthropicKey}
+              onChange={e => setAnthropicKey(e.target.value)}
+              placeholder="sk-ant-..."
+              style={inputStyle}
+            />
+            <label htmlFor="openai-key" style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>
+              OpenAI API Key (optional)
+            </label>
+            <input
+              id="openai-key"
+              type="password"
+              value={openaiKey}
+              onChange={e => setOpenaiKey(e.target.value)}
+              placeholder="sk-..."
+              style={inputStyle}
+            />
+            <p style={{ fontSize: '0.7rem', color: '#475569', margin: '0.25rem 0 0 0' }}>
+              Keys are sent per-request and never stored on the server.
+            </p>
+          </div>
+        )}
+      </div>
 
       <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem' }}>
         <label htmlFor="post-url" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.85rem', color: '#94a3b8' }}>
@@ -134,9 +210,6 @@ export default function App() {
           }}
         />
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <label htmlFor="provider-select" className="sr-only" style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
-            LLM Provider
-          </label>
           <select
             id="provider-select"
             value={provider}
@@ -152,9 +225,8 @@ export default function App() {
               fontSize: '0.85rem',
             }}
           >
-            <option value="">Auto (fallback)</option>
-            <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
-            <option value="gpt-4o">GPT-4o</option>
+            <option value="anthropic/claude-sonnet-4-20250514">Claude Sonnet 4</option>
+            <option value="openai/gpt-4o">GPT-4o</option>
             <option value="gemini/gemini-1.5-pro">Gemini 1.5 Pro</option>
           </select>
           <button
