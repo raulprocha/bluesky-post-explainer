@@ -21,7 +21,7 @@ dev = [
 ]
 
 [project.scripts]
-explain = "src.cli:main"
+explain = "src.entrypoints.cli:main"
 
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
