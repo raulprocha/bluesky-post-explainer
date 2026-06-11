@@ -33,7 +33,6 @@ export default function App() {
   const [bullets, setBullets] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [modelUsed, setModelUsed] = useState('')
-  const [provider, setProvider] = useState('claude')
 
   // API Keys (user provides in frontend)
   const [anthropicKey, setAnthropicKey] = useState('')
@@ -44,6 +43,16 @@ export default function App() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!url.trim()) return
+    if (!tavilyKey.trim()) {
+      setError('Tavily API Key is required for search.')
+      setStatus('error')
+      return
+    }
+    if (!anthropicKey.trim() && !openaiKey.trim()) {
+      setError('Provide at least one LLM API key (Anthropic or OpenAI).')
+      setStatus('error')
+      return
+    }
 
     // Reset state
     setStatus('extracting')
@@ -55,18 +64,11 @@ export default function App() {
     setModelUsed('')
 
     try {
-      const providerMap: Record<string, string> = {
-        claude: 'anthropic/claude-sonnet-4-20250514',
-        gpt4o: 'openai/gpt-4o',
-        gemini: 'gemini/gemini-1.5-pro',
-      }
-
       const response = await fetch('/api/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: url.trim(),
-          provider: providerMap[provider] || null,
           api_keys: {
             anthropic: anthropicKey || null,
             openai: openaiKey || null,
@@ -129,7 +131,7 @@ export default function App() {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Unknown error')
     }
-  }, [url, provider, anthropicKey, openaiKey, tavilyKey])
+  }, [url, anthropicKey, openaiKey, tavilyKey])
 
   const isLoading = !['idle', 'done', 'error'].includes(status)
 
@@ -165,7 +167,7 @@ export default function App() {
               style={inputStyle}
             />
             <label htmlFor="anthropic-key" style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>
-              Anthropic API Key
+              Anthropic API Key (for Claude)
             </label>
             <input
               id="anthropic-key"
@@ -176,7 +178,7 @@ export default function App() {
               style={inputStyle}
             />
             <label htmlFor="openai-key" style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>
-              OpenAI API Key (optional)
+              OpenAI API Key (for GPT-4o, optional)
             </label>
             <input
               id="openai-key"
@@ -187,7 +189,7 @@ export default function App() {
               style={inputStyle}
             />
             <p style={{ fontSize: '0.7rem', color: '#475569', margin: '0.25rem 0 0 0' }}>
-              Keys are sent per-request and never stored on the server.
+              The model is chosen automatically based on which key you provide. Keys are sent per-request only.
             </p>
           </div>
         )}
@@ -215,43 +217,22 @@ export default function App() {
             marginBottom: '0.75rem',
           }}
         />
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <select
-            id="provider-select"
-            value={provider}
-            onChange={e => setProvider(e.target.value)}
-            disabled={isLoading}
-            aria-label="LLM Provider"
-            style={{
-              padding: '0.6rem',
-              borderRadius: '8px',
-              border: '1px solid #334155',
-              background: '#1e293b',
-              color: '#e2e8f0',
-              fontSize: '0.85rem',
-            }}
-          >
-            <option value="claude">Claude (Anthropic)</option>
-            <option value="gpt4o">GPT-4o (OpenAI)</option>
-            <option value="gemini">Gemini 1.5 Pro (Google)</option>
-          </select>
-          <button
-            type="submit"
-            disabled={isLoading || !url.trim()}
-            style={{
-              flex: 1,
-              padding: '0.6rem 1.5rem',
-              borderRadius: '8px',
-              border: 'none',
-              background: isLoading ? '#475569' : '#3b82f6',
-              color: '#fff',
-              fontSize: '0.95rem',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {isLoading ? statusMessage : 'Explain'}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={isLoading || !url.trim()}
+          style={{
+            width: '100%',
+            padding: '0.7rem 1.5rem',
+            borderRadius: '8px',
+            border: 'none',
+            background: isLoading ? '#475569' : '#3b82f6',
+            color: '#fff',
+            fontSize: '0.95rem',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {isLoading ? statusMessage : 'Explain'}
+        </button>
       </form>
 
       {error && (

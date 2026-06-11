@@ -89,6 +89,17 @@ class ExplainRequest(BaseModel):
     api_keys: ApiKeys | None = None
 
 
+def _resolve_provider(api_keys: ApiKeys | None) -> str | None:
+    """Auto-detect provider from which API key was provided."""
+    if not api_keys:
+        return None
+    if api_keys.anthropic:
+        return "anthropic/claude-sonnet-4-20250514"
+    if api_keys.openai:
+        return "openai/gpt-4o"
+    return None
+
+
 def _apply_api_keys(keys: ApiKeys | None) -> None:
     """Set API keys as environment variables for the current request."""
     if not keys:
@@ -170,8 +181,10 @@ async def _sse_generator(url: str, provider: str | None, ranker, api_keys: ApiKe
 @app.post("/api/explain")
 async def explain_post(request: ExplainRequest):
     """Start explanation pipeline and stream results via SSE."""
+    # Auto-detect provider from keys if not explicitly set
+    provider = request.provider or _resolve_provider(request.api_keys)
     return StreamingResponse(
-        _sse_generator(request.url, request.provider, app.state.ranker, request.api_keys),
+        _sse_generator(request.url, provider, app.state.ranker, request.api_keys),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
