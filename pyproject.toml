@@ -7,6 +7,7 @@ dependencies = [
     "litellm",
     "httpx",
     "sentence-transformers",
+    "transformers",
     "tavily-python",
     "python-dotenv",
     "fastapi",

@@ -1,0 +1,124 @@
+{
+  "per_case": [
+    {
+      "post_url": "https://bsky.app/profile/bsky.app/post/3mnzpiackwk25",
+      "queries": [
+        "bsky chat group inquiries"
+      ],
+      "scores": {
+        "faithfulness": 0.867,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 4.4
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/truthspace.bsky.social/post/3mkcnenntx223",
+      "queries": [
+        "the truth behind trump's tweets"
+      ],
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 2.0,
+        "context_helpfulness": 3.4
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/maks23.bsky.social/post/3mo25zodtys27",
+      "queries": [
+        "U.S. Senate Security Assistance Vote increases funding to $750M"
+      ],
+      "scores": {
+        "faithfulness": 0.857,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.6
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/kyivindependent.com/post/3mo23t6ec4k2r",
+      "queries": [
+        "Ukraine confirms strike on Crimea's Armiansk bridge"
+      ],
+      "scores": {
+        "faithfulness": 0.867,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.0
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/devnmei.bsky.social/post/3mo25jg4l4c2e",
+      "queries": [
+        "He Jax on my Pomni til I Caine",
+        "tadc fortnite"
+      ],
+      "scores": {
+        "faithfulness": 0.615,
+        "answer_relevance": 4.0,
+        "context_helpfulness": 3.6
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo25nmxgck2x",
+      "queries": [
+        "Congress says no to confirmation of Trump's man investigating Epstein."
+      ],
+      "scores": {
+        "faithfulness": 0.583,
+        "answer_relevance": 2.0,
+        "context_helpfulness": 2.6
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo24ctdh6s2n",
+      "queries": [
+        "Epstein's assistant Lesley Groff paid legal fees"
+      ],
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 3.0
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/laurenmeidasa.bsky.social/post/3mo24jk7u4c2b",
+      "queries": [
+        "Democrats call on Vance to testify"
+      ],
+      "scores": {
+        "faithfulness": 0.8,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 3.0
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/wolvendamien.bsky.social/post/3mo25cb345c25",
+      "queries": [
+        "Jane Yolen books in my elementary and middle school library"
+      ],
+      "scores": {
+        "faithfulness": 0.643,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.6
+      }
+    },
+    {
+      "post_url": "https://bsky.app/profile/lynnplourde.bsky.social/post/3mo245c2zmc24",
+      "queries": [
+        "Jane Yolen books & legacy forever"
+      ],
+      "scores": {
+        "faithfulness": 0.632,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.4
+      }
+    }
+  ],
+  "summary": {
+    "total_cases": 10,
+    "successful": 10,
+    "averages": {
+      "faithfulness": 0.7864,
+      "answer_relevance": 3.9,
+      "context_helpfulness": 3.76
+    }
+  }
+}

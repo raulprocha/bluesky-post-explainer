@@ -4,9 +4,9 @@
     "successful": 10,
     "errors": 0,
     "averages": {
-      "faithfulness": 0.7713316095669037,
-      "answer_relevance": 3.5,
-      "context_helpfulness": 3.18
+      "faithfulness": 0.8436568986568986,
+      "answer_relevance": 4.0,
+      "context_helpfulness": 3.8
     }
   },
   "per_case": [
@@ -15,9 +15,9 @@
       "post_url": "https://bsky.app/profile/bsky.app/post/3mnzpiackwk25",
       "status": "success",
       "scores": {
-        "faithfulness": 1.0,
+        "faithfulness": 0.7,
         "answer_relevance": 4.0,
-        "context_helpfulness": 3.0
+        "context_helpfulness": 4.0
       }
     },
     {
@@ -27,7 +27,7 @@
       "scores": {
         "faithfulness": 1.0,
         "answer_relevance": 2.0,
-        "context_helpfulness": 2.6
+        "context_helpfulness": 4.2
       }
     },
     {
@@ -35,9 +35,9 @@
       "post_url": "https://bsky.app/profile/maks23.bsky.social/post/3mo25zodtys27",
       "status": "success",
       "scores": {
-        "faithfulness": 0.7857142857142857,
-        "answer_relevance": 3.0,
-        "context_helpfulness": 2.6
+        "faithfulness": 1.0,
+        "answer_relevance": 4.0,
+        "context_helpfulness": 3.4
       }
     },
     {
@@ -45,9 +45,9 @@
       "post_url": "https://bsky.app/profile/kyivindependent.com/post/3mo23t6ec4k2r",
       "status": "success",
       "scores": {
-        "faithfulness": 1.0,
-        "answer_relevance": 2.0,
-        "context_helpfulness": 3.8
+        "faithfulness": 0.6111111111111112,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 3.6
       }
     },
     {
@@ -55,9 +55,9 @@
       "post_url": "https://bsky.app/profile/devnmei.bsky.social/post/3mo25jg4l4c2e",
       "status": "success",
       "scores": {
-        "faithfulness": 0.6923076923076923,
-        "answer_relevance": 5.0,
-        "context_helpfulness": 4.4
+        "faithfulness": 0.8571428571428571,
+        "answer_relevance": 4.0,
+        "context_helpfulness": 4.2
       }
     },
     {
@@ -65,9 +65,9 @@
       "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo25nmxgck2x",
       "status": "success",
       "scores": {
-        "faithfulness": 1.0,
-        "answer_relevance": 2.0,
-        "context_helpfulness": 2.0
+        "faithfulness": 0.8571428571428571,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 2.2
       }
     },
     {
@@ -75,9 +75,9 @@
       "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo24ctdh6s2n",
       "status": "success",
       "scores": {
-        "faithfulness": 1.0,
-        "answer_relevance": 4.0,
-        "context_helpfulness": 2.6
+        "faithfulness": 0.8333333333333334,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 3.6
       }
     },
     {
@@ -85,9 +85,9 @@
       "post_url": "https://bsky.app/profile/laurenmeidasa.bsky.social/post/3mo24jk7u4c2b",
       "status": "success",
       "scores": {
-        "faithfulness": 1.0,
-        "answer_relevance": 5.0,
-        "context_helpfulness": 4.0
+        "faithfulness": 0.9230769230769231,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 4.2
       }
     },
     {
@@ -95,9 +95,9 @@
       "post_url": "https://bsky.app/profile/wolvendamien.bsky.social/post/3mo25cb345c25",
       "status": "success",
       "scores": {
-        "faithfulness": 0.23529411764705882,
-        "answer_relevance": 3.0,
-        "context_helpfulness": 3.2
+        "faithfulness": 0.75,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.2
       }
     },
     {
@@ -105,9 +105,9 @@
       "post_url": "https://bsky.app/profile/lynnplourde.bsky.social/post/3mo245c2zmc24",
       "status": "success",
       "scores": {
-        "faithfulness": 0.0,
+        "faithfulness": 0.9047619047619048,
         "answer_relevance": 5.0,
-        "context_helpfulness": 3.6
+        "context_helpfulness": 4.4
       }
     }
   ]
