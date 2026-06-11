@@ -18,7 +18,7 @@ from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter
 from src.adapters.tavily_searcher import TavilySearcher
 from src.domain.use_cases import ExplainPostUseCase
-from src.exceptions import ExplainerError
+from src.domain.exceptions import ExplainerError
 
 
 def _build_parser() -> argparse.ArgumentParser:

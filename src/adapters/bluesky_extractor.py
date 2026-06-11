@@ -11,7 +11,7 @@ import httpx
 
 from src.domain.entities import ImageEmbed, PostContent
 from src.domain.ports import PostExtractorPort
-from src.exceptions import NetworkError, PostBlockedError, PostNotFoundError
+from src.domain.exceptions import NetworkError, PostBlockedError, PostNotFoundError
 
 # Regex for Bluesky post URLs
 _BSKY_URL_PATTERN = re.compile(

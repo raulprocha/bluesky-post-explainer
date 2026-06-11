@@ -10,7 +10,7 @@ import logging
 import litellm
 
 from src.domain.ports import LLMPort
-from src.exceptions import AllProvidersFailedError
+from src.domain.exceptions import AllProvidersFailedError
 
 logger = logging.getLogger(__name__)
 

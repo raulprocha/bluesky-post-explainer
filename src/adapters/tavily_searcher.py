@@ -12,7 +12,7 @@ from tavily import TavilyClient
 
 from src.domain.entities import PostContent, SearchResult
 from src.domain.ports import SearchPort
-from src.exceptions import SearchError
+from src.domain.exceptions import SearchError
 
 logger = logging.getLogger(__name__)
 

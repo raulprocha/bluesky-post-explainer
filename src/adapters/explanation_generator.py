@@ -17,7 +17,7 @@ from src.domain.entities import (
     RankedContext,
 )
 from src.domain.ports import ExplanationPort, LLMPort
-from src.exceptions import GenerationError
+from src.domain.exceptions import GenerationError
 
 logger = logging.getLogger(__name__)
 

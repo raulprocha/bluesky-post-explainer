@@ -21,7 +21,7 @@ from src.adapters.tavily_searcher import TavilySearcher
 from src.domain.entities import RankedContext, SearchResult
 from src.domain.ports import RankerPort
 from src.domain.use_cases import ExplainPostUseCase
-from src.exceptions import ExplainerError
+from src.domain.exceptions import ExplainerError
 
 logger = logging.getLogger(__name__)
 
