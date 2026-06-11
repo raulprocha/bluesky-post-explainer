@@ -142,8 +142,11 @@ export default function App() {
       <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
         🔍 Contextual Post Explainer
       </h1>
-      <p style={{ color: '#94a3b8', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-        Paste a Bluesky post URL to get AI-powered context explanation
+      <p style={{ color: '#94a3b8', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+        Paste a Bluesky post URL and the agent searches the web for context, then explains the post in 3-5 grounded bullets with source citations.
+      </p>
+      <p style={{ color: '#64748b', marginBottom: '1.5rem', fontSize: '0.78rem' }}>
+        Pipeline: extract post (text + images) → rewrite into search queries → search the web → rerank results → generate explanation with citations. Posts with images are analyzed by a vision model.
       </p>
 
       {/* API Keys Section */}
@@ -199,7 +202,7 @@ export default function App() {
 
       <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem' }}>
         <label htmlFor="post-url" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.85rem', color: '#94a3b8' }}>
-          Post URL
+          Bluesky Post URL
         </label>
         <input
           id="post-url"
@@ -242,6 +245,9 @@ export default function App() {
           <option value="cloud">Cloud LLM (higher quality, uses tokens)</option>
           <option value="local">Local CPU — Qwen2.5-0.5B (free, slower)</option>
         </select>
+        <p style={{ fontSize: '0.72rem', color: '#64748b', margin: '-0.4rem 0 0.75rem 0' }}>
+          Converts the post into focused search queries. <strong>Cloud</strong> uses your LLM API (best quality, costs tokens). <strong>Local</strong> runs a small model on CPU — free, no tokens, but slower and slightly less accurate (first run downloads ~1GB).
+        </p>
         <button
           type="submit"
           disabled={isLoading || !url.trim()}
