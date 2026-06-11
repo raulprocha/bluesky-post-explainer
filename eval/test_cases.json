@@ -1,0 +1,123 @@
+[
+  {
+    "post_url": "https://bsky.app/profile/simonw.bsky.social/post/3kwx9t2abc1",
+    "description": "Tech post about a new open-source LLM tool release",
+    "expected_themes": [
+      "description of the open-source tool and its purpose",
+      "how it relates to current LLM development workflows",
+      "key features or capabilities announced",
+      "community reception or significance in the ecosystem"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/karpathy.bsky.social/post/3kwz4m7def2",
+    "description": "AI researcher commenting on a breakthrough in reasoning models",
+    "expected_themes": [
+      "what the reasoning model breakthrough involves",
+      "how it compares to previous approaches",
+      "implications for AI capabilities and safety",
+      "context about the researcher's perspective"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/journalist.bsky.social/post/3kx1a8rghi3",
+    "description": "Political commentary on new tech regulation legislation",
+    "expected_themes": [
+      "what the proposed legislation aims to regulate",
+      "which companies or sectors would be affected",
+      "arguments for and against the regulation",
+      "current status and likelihood of passage"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/astrobio.bsky.social/post/3kx2b9sjkl4",
+    "description": "Science post about discovery of biosignatures on an exoplanet",
+    "expected_themes": [
+      "which exoplanet and what biosignatures were detected",
+      "the detection method used (e.g., JWST spectroscopy)",
+      "scientific significance and caveats",
+      "how this compares to previous exoplanet discoveries"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/memequeen.bsky.social/post/3kx3c1tmno5",
+    "description": "Cultural meme referencing a viral internet moment with tech industry context",
+    "expected_themes": [
+      "origin of the meme format being referenced",
+      "what tech industry event or trend it comments on",
+      "why it resonated with the audience",
+      "broader cultural significance or discourse"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/rustdev.bsky.social/post/3kx4d2upqr6",
+    "description": "Programming post about a Rust language RFC for async improvements",
+    "expected_themes": [
+      "what the Rust RFC proposes to change",
+      "current pain points in async Rust that motivate the change",
+      "community discussion and trade-offs",
+      "timeline and implementation status"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/climatesci.bsky.social/post/3kx5e3vstu7",
+    "description": "Climate science post sharing a new IPCC report finding with chart image",
+    "expected_themes": [
+      "key finding from the IPCC report being highlighted",
+      "what the chart or visualization shows",
+      "comparison to previous climate projections",
+      "policy implications mentioned"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/indiedev.bsky.social/post/3kx6f4wvwx8",
+    "description": "Indie game developer announcing their game with screenshot images",
+    "expected_themes": [
+      "what kind of game is being announced",
+      "notable visual or gameplay elements visible in screenshots",
+      "development context (solo dev, game jam, etc.)",
+      "platform availability and release timeline"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/techcritic.bsky.social/post/3kx7g5xyyz9",
+    "description": "Thread-style critique of a major platform's policy change",
+    "expected_themes": [
+      "which platform and what policy changed",
+      "how the change affects users or creators",
+      "historical context of similar policy decisions",
+      "alternatives or responses from the community",
+      "potential legal or regulatory implications"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/mleng.bsky.social/post/3kx8h6zab10",
+    "description": "Machine learning engineer sharing benchmark results for a new model architecture",
+    "expected_themes": [
+      "what model architecture is being benchmarked",
+      "key performance metrics and how they compare to baselines",
+      "computational efficiency or cost considerations",
+      "practical implications for production use"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/opensrc.bsky.social/post/3kx9i7bcd11",
+    "description": "Open source maintainer discussing sustainability and funding challenges",
+    "expected_themes": [
+      "which project or ecosystem is being discussed",
+      "specific funding or sustainability challenges raised",
+      "proposed solutions or models (sponsorships, foundations, etc.)",
+      "broader context of open source sustainability discourse"
+    ]
+  },
+  {
+    "post_url": "https://bsky.app/profile/spacefan.bsky.social/post/3kxaj8def12",
+    "description": "Post about a SpaceX or NASA mission milestone with launch photo",
+    "expected_themes": [
+      "which mission and what milestone was achieved",
+      "technical significance of the accomplishment",
+      "what the launch or mission photo shows",
+      "next steps or future mission objectives"
+    ]
+  }
+]

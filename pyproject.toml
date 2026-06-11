@@ -1,0 +1,35 @@
+[project]
+name = "contextual-post-explainer"
+version = "0.1.0"
+description = "CLI agent that explains Bluesky posts by retrieving and synthesizing relevant web context"
+requires-python = ">=3.11"
+dependencies = [
+    "litellm",
+    "httpx",
+    "sentence-transformers",
+    "tavily-python",
+    "python-dotenv",
+    "fastapi",
+    "uvicorn[standard]",
+]
+
+[project.optional-dependencies]
+dev = [
+    "hypothesis",
+    "pytest",
+    "pytest-asyncio",
+]
+
+[project.scripts]
+explain = "src.cli:main"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*", "eval*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

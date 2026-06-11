@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.hypothesis/
+htmlcov/
+.coverage
+
+# Node (frontend)
+frontend/node_modules/
+frontend/dist/
+
+# Kiro
+.kiro/
+
+# Misc
+*.log
+_staging/
+
+# Exercise source files (not for repo)
+RC_assignment.pdf
+AI Technical Exercise_ Contextual Post Explainer.txt
