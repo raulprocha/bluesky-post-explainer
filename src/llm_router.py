@@ -11,8 +11,8 @@ from src.exceptions import AllProvidersFailedError
 logger = logging.getLogger(__name__)
 
 DEFAULT_PROVIDERS = [
-    "claude-3-5-sonnet-20241022",
-    "gpt-4o",
+    "anthropic/claude-sonnet-4-20250514",
+    "openai/gpt-4o",
     "gemini/gemini-1.5-pro",
 ]
 
