@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from src.adapters.bluesky_extractor import BlueskyExtractor
 from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter
+from src.adapters.local_query_rewriter import LocalQueryRewriter
 from src.adapters.query_rewriter import QueryRewriter
 from src.adapters.tavily_searcher import TavilySearcher
 from src.domain.entities import RankedContext, SearchResult
@@ -88,6 +89,7 @@ class ExplainRequest(BaseModel):
     url: str
     provider: str | None = None
     api_keys: ApiKeys | None = None
+    rewriter: str = "cloud"  # "cloud" (LLM API) or "local" (CPU model)
 
 
 def _resolve_provider(api_keys: ApiKeys | None) -> str | None:
@@ -113,13 +115,25 @@ def _apply_api_keys(keys: ApiKeys | None) -> None:
         os.environ["TAVILY_API_KEY"] = keys.tavily
 
 
-def _build_use_case(ranker, provider: str | None = None, tavily_key: str | None = None) -> ExplainPostUseCase:
-    """Build use case with all adapters."""
+def _build_use_case(
+    ranker,
+    provider: str | None = None,
+    tavily_key: str | None = None,
+    rewriter: str = "cloud",
+) -> ExplainPostUseCase:
+    """Build use case with all adapters.
+
+    Args:
+        rewriter: "cloud" uses the LLM API rewriter; "local" uses the CPU model.
+    """
     extractor = BlueskyExtractor()
     searcher = TavilySearcher(api_key=tavily_key)
     llm = LiteLLMRouter()
     explainer = ExplanationGeneratorAdapter(llm=llm)
-    query_rewriter = QueryRewriter(llm=llm, model=provider)
+    if rewriter == "local":
+        query_rewriter = LocalQueryRewriter()
+    else:
+        query_rewriter = QueryRewriter(llm=llm, model=provider)
     return ExplainPostUseCase(
         extractor=extractor,
         searcher=searcher,
@@ -131,13 +145,15 @@ def _build_use_case(ranker, provider: str | None = None, tavily_key: str | None 
     )
 
 
-async def _sse_generator(url: str, provider: str | None, ranker, api_keys: ApiKeys | None):
+async def _sse_generator(
+    url: str, provider: str | None, ranker, api_keys: ApiKeys | None, rewriter: str = "cloud"
+):
     """Async generator yielding SSE events as the pipeline progresses."""
     # Apply user-provided API keys to environment
     _apply_api_keys(api_keys)
 
     tavily_key = api_keys.tavily if api_keys else None
-    use_case = _build_use_case(ranker, provider, tavily_key=tavily_key)
+    use_case = _build_use_case(ranker, provider, tavily_key=tavily_key, rewriter=rewriter)
 
     try:
         # Step 1: Extract post
@@ -190,7 +206,7 @@ async def explain_post(request: ExplainRequest):
     # Auto-detect provider from keys if not explicitly set
     provider = request.provider or _resolve_provider(request.api_keys)
     return StreamingResponse(
-        _sse_generator(request.url, provider, app.state.ranker, request.api_keys),
+        _sse_generator(request.url, provider, app.state.ranker, request.api_keys, request.rewriter),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",

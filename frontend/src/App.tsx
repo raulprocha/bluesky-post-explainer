@@ -39,6 +39,7 @@ export default function App() {
   const [openaiKey, setOpenaiKey] = useState('')
   const [tavilyKey, setTavilyKey] = useState('')
   const [showSettings, setShowSettings] = useState(true)
+  const [rewriter, setRewriter] = useState('cloud')
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
@@ -69,6 +70,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: url.trim(),
+          rewriter,
           api_keys: {
             anthropic: anthropicKey || null,
             openai: openaiKey || null,
@@ -131,7 +133,7 @@ export default function App() {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Unknown error')
     }
-  }, [url, anthropicKey, openaiKey, tavilyKey])
+  }, [url, anthropicKey, openaiKey, tavilyKey, rewriter])
 
   const isLoading = !['idle', 'done', 'error'].includes(status)
 
@@ -217,6 +219,29 @@ export default function App() {
             marginBottom: '0.75rem',
           }}
         />
+        <label htmlFor="rewriter-select" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.85rem', color: '#94a3b8' }}>
+          Query Rewriter
+        </label>
+        <select
+          id="rewriter-select"
+          value={rewriter}
+          onChange={e => setRewriter(e.target.value)}
+          disabled={isLoading}
+          aria-label="Query Rewriter"
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            borderRadius: '8px',
+            border: '1px solid #334155',
+            background: '#1e293b',
+            color: '#e2e8f0',
+            fontSize: '0.85rem',
+            marginBottom: '0.75rem',
+          }}
+        >
+          <option value="cloud">Cloud LLM (higher quality, uses tokens)</option>
+          <option value="local">Local CPU — Qwen2.5-0.5B (free, slower)</option>
+        </select>
         <button
           type="submit"
           disabled={isLoading || !url.trim()}
