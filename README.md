@@ -38,7 +38,7 @@ cd frontend
 npm run dev
 ```
 
-Open http://localhost:5173 — paste your API keys and a Bluesky post URL.
+Open http://localhost:5173 (or whichever port Vite assigns) — paste your API keys and a Bluesky post URL.
 
 ## Architecture
 
@@ -54,6 +54,7 @@ graph TD
     subgraph Domain
         UC[ExplainPostUseCase]
         P[Ports - Abstract Interfaces]
+        E[Entities - Shared Data Models]
     end
 
     subgraph Adapters
@@ -67,6 +68,7 @@ graph TD
     API --> UC
     CLI --> UC
     UC --> P
+    UC --> E
     P -.-> BE
     P -.-> TS
     P -.-> CR
