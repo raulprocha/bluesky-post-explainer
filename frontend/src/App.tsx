@@ -33,7 +33,7 @@ export default function App() {
   const [bullets, setBullets] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [modelUsed, setModelUsed] = useState('')
-  const [provider, setProvider] = useState('anthropic/claude-sonnet-4-20250514')
+  const [provider, setProvider] = useState('claude')
 
   // API Keys (user provides in frontend)
   const [anthropicKey, setAnthropicKey] = useState('')
@@ -55,12 +55,18 @@ export default function App() {
     setModelUsed('')
 
     try {
+      const providerMap: Record<string, string> = {
+        claude: 'anthropic/claude-sonnet-4-20250514',
+        gpt4o: 'openai/gpt-4o',
+        gemini: 'gemini/gemini-1.5-pro',
+      }
+
       const response = await fetch('/api/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: url.trim(),
-          provider: provider || null,
+          provider: providerMap[provider] || null,
           api_keys: {
             anthropic: anthropicKey || null,
             openai: openaiKey || null,
@@ -225,9 +231,9 @@ export default function App() {
               fontSize: '0.85rem',
             }}
           >
-            <option value="anthropic/claude-sonnet-4-20250514">Claude Sonnet 4</option>
-            <option value="openai/gpt-4o">GPT-4o</option>
-            <option value="gemini/gemini-1.5-pro">Gemini 1.5 Pro</option>
+            <option value="claude">Claude (Anthropic)</option>
+            <option value="gpt4o">GPT-4o (OpenAI)</option>
+            <option value="gemini">Gemini 1.5 Pro (Google)</option>
           </select>
           <button
             type="submit"
