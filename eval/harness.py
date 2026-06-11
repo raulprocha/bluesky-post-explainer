@@ -8,18 +8,42 @@ Requirements: 6.6 [Design: Eval Harness]
 
 import json
 import logging
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from src.agent import Agent
-from src.explanation_generator import ExplanationResult
-from src.llm_router import LLMRouter
+from src.domain.use_cases import ExplainPostUseCase
+from src.domain.entities import ExplanationResult, RankedContext, SearchResult
+from src.domain.ports import RankerPort
+from src.adapters.bluesky_extractor import BlueskyExtractor
+from src.adapters.crossencoder_reranker import CrossEncoderReranker
+from src.adapters.explanation_generator import ExplanationGeneratorAdapter
+from src.adapters.litellm_router import LiteLLMRouter as LLMRouter
+from src.adapters.tavily_searcher import TavilySearcher
 from eval.judge import score_faithfulness, score_relevance, score_helpfulness
 
 logger = logging.getLogger(__name__)
 
 # Default path to test cases file relative to project root
 DEFAULT_TEST_CASES_PATH = "eval/test_cases.json"
+
+
+class _ScoreReranker(RankerPort):
+    """Lightweight reranker fallback using search provider scores.
+
+    Used when the cross-encoder model (PyTorch) is not enabled, avoiding
+    heavy ML dependencies during evaluation runs.
+    """
+
+    def rerank(self, query: str, results: list[SearchResult]) -> list[RankedContext]:
+        ranked = [
+            RankedContext(
+                title=r.title, url=r.url, content=r.content, relevance_score=r.score
+            )
+            for r in results
+        ]
+        ranked.sort(key=lambda x: x.relevance_score, reverse=True)
+        return ranked[:5]
 
 
 @dataclass
@@ -69,6 +93,7 @@ class EvalHarness:
         """
         self.provider = provider
         self._router = LLMRouter()
+        self._use_crossencoder = os.environ.get("ENABLE_CROSSENCODER") == "1"
 
     def load_test_cases(self, path: str | None = None) -> list[TestCase]:
         """Load test cases from JSON file.
@@ -116,12 +141,23 @@ class EvalHarness:
         Returns:
             EvalResult with explanation, scores, reasoning, or error.
         """
-        # Step 1: Run the agent
-        agent = Agent(provider=self.provider, verbose=True)
+        # Step 1: Run the agent pipeline via use case
+        extractor = BlueskyExtractor()
+        searcher = TavilySearcher()
+        ranker = CrossEncoderReranker() if self._use_crossencoder else _ScoreReranker()
+        explainer = ExplanationGeneratorAdapter(llm=LLMRouter())
+        use_case = ExplainPostUseCase(
+            extractor=extractor,
+            searcher=searcher,
+            ranker=ranker,
+            explainer=explainer,
+            provider=self.provider,
+            verbose=True,
+        )
         explanation: ExplanationResult | None = None
 
         try:
-            explanation = await agent.explain(case.post_url)
+            explanation = await use_case.execute(case.post_url)
         except Exception as e:
             logger.error(
                 "Agent failed for %s: %s", case.post_url, str(e)
@@ -141,18 +177,18 @@ class EvalHarness:
                 f"• {bullet}" for bullet in explanation.bullets
             )
 
-            # Get context text from agent's last ranked contexts
+            # Get context text from use case's last ranked contexts
             context_text = ""
-            if agent.last_ranked_contexts:
+            if use_case.last_ranked_contexts:
                 context_text = "\n\n".join(
                     f"[{ctx.title}] ({ctx.url})\n{ctx.content}"
-                    for ctx in agent.last_ranked_contexts
+                    for ctx in use_case.last_ranked_contexts
                 )
 
-            # Get post text from agent's last post content
+            # Get post text from use case's last post content
             post_text = ""
-            if agent.last_post_content:
-                post_text = agent.last_post_content.text
+            if use_case.last_post_content:
+                post_text = use_case.last_post_content.text
 
             # Score all three dimensions
             faithfulness_score, faithfulness_reasoning = await score_faithfulness(

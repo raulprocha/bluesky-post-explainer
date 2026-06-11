@@ -11,7 +11,7 @@ for transparency and debugging.
 
 import re
 
-from src.llm_router import LLMRouter
+from src.adapters.litellm_router import LiteLLMRouter as LLMRouter
 
 
 FAITHFULNESS_DECOMPOSE_PROMPT = """You are a claim verification expert.
@@ -199,7 +199,7 @@ async def score_faithfulness(
         },
     ]
     decompose_response = await router.completion(decompose_messages)
-    claims_text = decompose_response.content.strip()
+    claims_text = decompose_response["content"].strip()
 
     # Check if we got any claims
     claims_lines = [
@@ -224,7 +224,7 @@ async def score_faithfulness(
         },
     ]
     verify_response = await router.completion(verify_messages)
-    verify_text = verify_response.content.strip()
+    verify_text = verify_response["content"].strip()
 
     # Parse YES/NO counts
     yes_count, total = _parse_yes_no_counts(verify_text)
@@ -273,7 +273,7 @@ async def score_relevance(
         },
     ]
     response = await router.completion(messages)
-    response_text = response.content.strip()
+    response_text = response["content"].strip()
 
     score = _extract_number(response_text, 1.0, 5.0)
     score = _clamp(score, 1.0, 5.0)
@@ -309,7 +309,7 @@ async def score_helpfulness(
         },
     ]
     response = await router.completion(messages)
-    response_text = response.content.strip()
+    response_text = response["content"].strip()
 
     scores = _parse_helpfulness_scores(response_text)
 

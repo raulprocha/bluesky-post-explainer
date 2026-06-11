@@ -4,14 +4,15 @@ import pytest
 import httpx
 from unittest.mock import AsyncMock, patch
 
-from src.post_extractor import PostExtractor, PostContent, ImageEmbed
+from src.adapters.bluesky_extractor import BlueskyExtractor
+from src.domain.entities import PostContent, ImageEmbed
 
 
 class TestParseUrl:
     """Tests for URL parsing."""
 
     def setup_method(self):
-        self.extractor = PostExtractor()
+        self.extractor = BlueskyExtractor()
 
     def test_valid_url_simple_handle(self):
         actor, rkey = self.extractor.parse_url(
@@ -65,7 +66,7 @@ class TestParseThread:
     """Tests for thread JSON parsing."""
 
     def setup_method(self):
-        self.extractor = PostExtractor()
+        self.extractor = BlueskyExtractor()
 
     def test_basic_thread(self):
         thread_data = {
@@ -197,7 +198,7 @@ class TestParseThread:
             }
         }
 
-        from src.exceptions import PostNotFoundError
+        from src.domain.exceptions import PostNotFoundError
 
         with pytest.raises(PostNotFoundError, match="not found"):
             self.extractor.parse_thread(thread_data)
@@ -211,7 +212,7 @@ class TestParseThread:
             }
         }
 
-        from src.exceptions import PostBlockedError
+        from src.domain.exceptions import PostBlockedError
 
         with pytest.raises(PostBlockedError, match="blocked"):
             self.extractor.parse_thread(thread_data)

@@ -1,0 +1,114 @@
+{
+  "summary": {
+    "total_cases": 10,
+    "successful": 10,
+    "errors": 0,
+    "averages": {
+      "faithfulness": 0.7713316095669037,
+      "answer_relevance": 3.5,
+      "context_helpfulness": 3.18
+    }
+  },
+  "per_case": [
+    {
+      "description": "Post by @bsky.app: If you're curious about group chats and haven't seen the announcement, check it ...",
+      "post_url": "https://bsky.app/profile/bsky.app/post/3mnzpiackwk25",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 4.0,
+        "context_helpfulness": 3.0
+      }
+    },
+    {
+      "description": "Post by @truthspace.bsky.social: THE MARK IS OFF. 🎯\nPRESIDENT J TRUMP TWEET ON TRUTH SOCIAL...",
+      "post_url": "https://bsky.app/profile/truthspace.bsky.social/post/3mkcnenntx223",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 2.0,
+        "context_helpfulness": 2.6
+      }
+    },
+    {
+      "description": "Post by @maks23.bsky.social: 🇺🇸🇺🇦 U.S. Senate Armed Services Committee said it voted to extend U.S. security ...",
+      "post_url": "https://bsky.app/profile/maks23.bsky.social/post/3mo25zodtys27",
+      "status": "success",
+      "scores": {
+        "faithfulness": 0.7857142857142857,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 2.6
+      }
+    },
+    {
+      "description": "Post by @kyivindependent.com: ⚡️Ukraine confirms strike on Crimea's Armiansk bridge that hit 50 Russian milita...",
+      "post_url": "https://bsky.app/profile/kyivindependent.com/post/3mo23t6ec4k2r",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 2.0,
+        "context_helpfulness": 3.8
+      }
+    },
+    {
+      "description": "Post by @devnmei.bsky.social: He Jax on my Pomni til I Caine\n#tadc #fortnite...",
+      "post_url": "https://bsky.app/profile/devnmei.bsky.social/post/3mo25jg4l4c2e",
+      "status": "success",
+      "scores": {
+        "faithfulness": 0.6923076923076923,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.4
+      }
+    },
+    {
+      "description": "Post by @repstansbury.bsky.social: OK, let me get this straight. Congress said NO to confirming Trump’s guy who use...",
+      "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo25nmxgck2x",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 2.0,
+        "context_helpfulness": 2.0
+      }
+    },
+    {
+      "description": "Post by @repstansbury.bsky.social: Epstein is still paying the legal fees of witnesses in this case—including his a...",
+      "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo24ctdh6s2n",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 4.0,
+        "context_helpfulness": 2.6
+      }
+    },
+    {
+      "description": "Post by @laurenmeidasa.bsky.social: Democrats to call on Vance to testify to House committee over Epstein files\n\nPla...",
+      "post_url": "https://bsky.app/profile/laurenmeidasa.bsky.social/post/3mo24jk7u4c2b",
+      "status": "success",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 4.0
+      }
+    },
+    {
+      "description": "Post by @wolvendamien.bsky.social: Jane Yolen books in my elementary and middle school library literally changed th...",
+      "post_url": "https://bsky.app/profile/wolvendamien.bsky.social/post/3mo25cb345c25",
+      "status": "success",
+      "scores": {
+        "faithfulness": 0.23529411764705882,
+        "answer_relevance": 3.0,
+        "context_helpfulness": 3.2
+      }
+    },
+    {
+      "description": "Post by @lynnplourde.bsky.social: Jane Yolen has passed...450 books...the matriarch of children's books...what a g...",
+      "post_url": "https://bsky.app/profile/lynnplourde.bsky.social/post/3mo245c2zmc24",
+      "status": "success",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevance": 5.0,
+        "context_helpfulness": 3.6
+      }
+    }
+  ]
+}
