@@ -40,18 +40,65 @@ npm run dev
 
 Open http://localhost:5173 — paste your API keys and a Bluesky post URL.
 
-### Environment Variables (optional)
-
-If you prefer not to enter keys in the UI, create a `.env` file:
-
-```bash
-cp .env.example .env
-# Edit .env with your keys
-```
-
 ## Architecture
 
 Hexagonal (Ports & Adapters) architecture with clear separation of concerns:
+
+```mermaid
+graph TD
+    subgraph Entrypoints
+        FE[React Frontend] -->|SSE| API[FastAPI + SSE]
+        CLI[CLI argparse]
+    end
+
+    subgraph Domain
+        UC[ExplainPostUseCase]
+        P[Ports - Abstract Interfaces]
+        E[Entities - Pure Dataclasses]
+    end
+
+    subgraph Adapters
+        BE[BlueskyExtractor] -->|AT Protocol| BSky[Bluesky Public API]
+        TS[TavilySearcher] -->|REST| Tavily[Tavily Search API]
+        CR[CrossEncoderReranker] -->|inference| Model[ms-marco-MiniLM-L-6-v2]
+        LR[LiteLLMRouter] -->|unified API| LLM[Claude / GPT-4o / Gemini]
+        EG[ExplanationGenerator] --> LR
+    end
+
+    API --> UC
+    CLI --> UC
+    UC --> P
+    P -.-> BE
+    P -.-> TS
+    P -.-> CR
+    P -.-> EG
+```
+
+### Pipeline Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant React
+    participant FastAPI
+    participant Bluesky
+    participant Tavily
+    participant Reranker
+    participant LLM
+
+    User->>React: paste URL + API keys
+    React->>FastAPI: POST /api/explain (SSE)
+    FastAPI->>Bluesky: extract post (AT Protocol)
+    FastAPI-->>React: event: post (author, text)
+    FastAPI->>Tavily: search context
+    FastAPI-->>React: event: sources
+    FastAPI->>Reranker: rerank results
+    FastAPI->>LLM: generate explanation (+ images)
+    FastAPI-->>React: event: bullet (×3-5)
+    FastAPI-->>React: event: done
+```
+
+### Project Structure
 
 ```
 src/
@@ -142,7 +189,7 @@ python -m eval.cli --provider anthropic/claude-sonnet-4-20250514 --output report
 ## Assumptions
 
 - Bluesky was chosen as the social platform because its AT Protocol provides unauthenticated public API access, eliminating OAuth complexity
-- The cross-encoder reranker is optional at runtime — if PyTorch/sentence-transformers aren't installed, the system falls back to Tavily's relevance scores
+- The cross-encoder reranker (`ms-marco-MiniLM-L-6-v2`) runs locally and requires PyTorch (~2GB install). For lightweight deployments, set `ENABLE_CROSSENCODER=1` to activate it. Without it, the system uses Tavily's built-in relevance scores to rank results — still functional, just less precise
 - The evaluation harness uses LLM-as-judge rather than hard-coded expected outputs, since explanation quality is subjective and context-dependent
 - API keys are provided per-request to avoid server-side secret management for a demo application
 
