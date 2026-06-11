@@ -223,3 +223,27 @@ This re-runs the full pipeline on each test post and scores the output with an L
 | Search | Tavily API |
 | ML | sentence-transformers CrossEncoder |
 | Protocol | AT Protocol (Bluesky public AppView) |
+
+## Production Considerations
+
+### Which query rewriter in production?
+
+Query rewriting is a high-volume, low-complexity step — one call per request, just extracting entities and topics to feed search. Based on the comparative metrics above, the quality gap between cloud and local is small (faithfulness 0.84 vs 0.79) and concentrated where it matters least.
+
+**Default: local model, escalate to cloud only when needed.** A frontier LLM is overkill for entity extraction. Spending the premium token budget on the *explanation generation* (where quality is user-visible) yields far more value than spending it on rewriting. In production I would run a hybrid `FallbackQueryRewriter`: try the local model first, and promote to a cloud LLM only when retrieval comes back weak (zero/few results or low rerank scores). This pays the premium price only on hard cases.
+
+The hexagonal architecture makes this swap trivial — it's a new adapter implementing the same `QueryRewriter` interface, with zero changes to the use case.
+
+### Deploying the local model on AWS
+
+The local rewriter (`Qwen2.5-0.5B-Instruct`) is small and CPU-friendly, so it has several AWS paths:
+
+| Option | How | When |
+|--------|-----|------|
+| **EC2 / ECS Fargate / EKS** | Run the current container as-is; model loads in-process on a `c7g` (Graviton) or `c6i` CPU instance. Model weights baked into the image or mounted via EFS. | Lift-and-shift, full control, data stays in your VPC |
+| **SageMaker real-time endpoint** | Host the model as a managed endpoint; the rewriter adapter calls the endpoint instead of loading in-process | Managed scaling/versioning without self-managing inference servers |
+| **Amazon Bedrock (small model)** | Replace self-hosting with a managed small model (Nova Micro/Lite, Claude Haiku) | AWS-native, least ops — recommended for most cases |
+
+**Recommendation for AWS production:** rather than self-hosting Qwen, use **Bedrock with a small managed model** (e.g. Nova Micro). Same principle (cheap model for a trivial task) with no inference infrastructure to operate, automatic scaling, and very low per-token cost. Self-hosting on EC2/ECS only wins at very high, constant volume — or when data residency requires inference inside your own environment.
+
+In all cases, only the injected adapter changes; the domain use case is untouched.
