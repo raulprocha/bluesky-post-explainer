@@ -15,21 +15,45 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from src.adapters.bluesky_extractor import BlueskyExtractor
-from src.adapters.crossencoder_reranker import CrossEncoderReranker
 from src.adapters.explanation_generator import ExplanationGeneratorAdapter
 from src.adapters.litellm_router import LiteLLMRouter
 from src.adapters.tavily_searcher import TavilySearcher
+from src.domain.entities import RankedContext, SearchResult
+from src.domain.ports import RankerPort
 from src.domain.use_cases import ExplainPostUseCase
 from src.exceptions import ExplainerError
 
 logger = logging.getLogger(__name__)
 
 
+import os
+
+def _create_ranker():
+    """Create ranker — uses cross-encoder if ENABLE_CROSSENCODER=1, else score-based fallback."""
+    if os.environ.get("ENABLE_CROSSENCODER") == "1":
+        try:
+            from src.adapters.crossencoder_reranker import CrossEncoderReranker
+            return CrossEncoderReranker()
+        except Exception as e:
+            logger.warning("CrossEncoder failed to load: %s", e)
+
+    class ScoreBasedReranker(RankerPort):
+        """Fallback reranker using Tavily scores (no ML model needed)."""
+        def rerank(self, query: str, results: list[SearchResult]) -> list[RankedContext]:
+            ranked = [
+                RankedContext(title=r.title, url=r.url, content=r.content, relevance_score=r.score)
+                for r in results
+            ]
+            ranked.sort(key=lambda x: x.relevance_score, reverse=True)
+            return ranked[:5]
+
+    return ScoreBasedReranker()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan — initialize heavy resources once."""
-    # Reranker loads ML model at startup
-    app.state.ranker = CrossEncoderReranker()
+    app.state.ranker = _create_ranker()
     yield
 
 
