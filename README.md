@@ -1,188 +1,158 @@
-# Contextual Post Explainer
+# Bluesky Post Explainer
 
-A CLI-first Python agent that explains Bluesky posts by retrieving relevant web context. Given a post URL, the agent fetches the post content via the AT Protocol, searches for related context using Tavily, reranks results with a cross-encoder model, and generates 3–5 explanatory bullets using your choice of LLM provider.
+AI agent that explains Bluesky social media posts by searching for relevant web context and synthesizing explanatory bullets with source citations.
 
-## Architecture
-
-```mermaid
-graph TD
-    CLI[CLI Entry Point] --> Agent[Agent Orchestrator]
-    Agent --> PE[Post Extractor]
-    Agent --> CR[Context Retriever]
-    Agent --> RR[Reranker]
-    Agent --> EG[Explanation Generator]
-    Agent --> LR[LLM Router]
-
-    PE -->|AT Protocol| AppView[Public AppView API]
-    CR -->|Tavily SDK| Tavily[Tavily Search API]
-    RR -->|sentence-transformers| CrossEncoder[ms-marco-MiniLM-L-6-v2]
-    EG --> LR
-    LR -->|LiteLLM| Providers[Claude / GPT-4o / Gemini]
-
-    subgraph Evaluation
-        EH[Eval Harness] --> Agent
-        EH --> Judge[LLM Judge]
-        Judge --> LR
-    end
-```
-
-**Pipeline flow:**
-
-```
-URL → Post Extractor → Context Retriever → Reranker → Explanation Generator → Bullets
-```
-
-## Setup
+## Quick Start
 
 ### Prerequisites
 
-- Python >= 3.11
-- API keys for at least one LLM provider (Anthropic, OpenAI, or Google)
-- Tavily API key for web search
+- Python 3.11+
+- Node.js 18+
+- API keys: Tavily (search), Anthropic or OpenAI (LLM)
 
-### Installation
+### Setup
 
 ```bash
-git clone <repo-url>
-cd contextual-post-explainer
-
+# Clone and setup backend
+git clone https://github.com/raulprocha/bluesky-post-explainer.git
+cd bluesky-post-explainer
 python3 -m venv venv
 source venv/bin/activate
-
 pip install -e ".[dev]"
+
+# Setup frontend
+cd frontend
+npm install
+cd ..
 ```
 
-### Configuration
+### Running
 
-Copy the environment template and fill in your API keys:
+```bash
+# Terminal 1: Backend (FastAPI)
+source venv/bin/activate
+uvicorn src.entrypoints.api:app --host 0.0.0.0 --port 8000
+
+# Terminal 2: Frontend (React/Vite)
+cd frontend
+npm run dev
+```
+
+Open http://localhost:5173 — paste your API keys and a Bluesky post URL.
+
+### Environment Variables (optional)
+
+If you prefer not to enter keys in the UI, create a `.env` file:
 
 ```bash
 cp .env.example .env
+# Edit .env with your keys
 ```
 
-Required keys in `.env`:
+## Architecture
 
-| Variable | Purpose |
-|----------|---------|
-| `TAVILY_API_KEY` | Web search via Tavily (required) |
-| `OPENAI_API_KEY` | GPT-4o provider |
-| `ANTHROPIC_API_KEY` | Claude provider |
-| `GOOGLE_API_KEY` | Gemini provider |
+Hexagonal (Ports & Adapters) architecture with clear separation of concerns:
 
-You need at least one LLM provider key configured. The agent will fall back through available providers if the primary one fails.
+```
+src/
+├── domain/              # Core logic — zero external dependencies
+│   ├── entities.py      # Pure dataclasses (PostContent, SearchResult, etc.)
+│   ├── exceptions.py    # Domain exception hierarchy
+│   ├── ports.py         # Abstract interfaces (PostExtractorPort, SearchPort, etc.)
+│   └── use_cases.py     # ExplainPostUseCase — orchestrates the pipeline
+├── adapters/            # Concrete implementations of ports
+│   ├── bluesky_extractor.py    # AT Protocol post extraction
+│   ├── tavily_searcher.py      # Tavily web search
+│   ├── crossencoder_reranker.py # ML reranking (sentence-transformers)
+│   ├── litellm_router.py       # Multi-LLM routing via LiteLLM
+│   └── explanation_generator.py # Bullet generation with citations
+└── entrypoints/         # Interface layer
+    ├── api.py           # FastAPI + Server-Sent Events streaming
+    └── cli.py           # CLI interface
+frontend/                # React (Vite + TypeScript)
+eval/                    # Evaluation harness
+```
 
-## Usage
+### Pipeline Flow
 
-### Basic
+```
+URL → Post Extraction (AT Protocol) → Web Search (Tavily) → Reranking → LLM Generation → Bullets
+```
+
+The FastAPI backend streams results to the React frontend via Server-Sent Events (SSE), providing progressive updates at each pipeline stage.
+
+## Key Design Decisions
+
+### 1. Hexagonal Architecture
+
+The domain layer defines ports (abstract interfaces) that adapters implement. This means:
+- The core use case doesn't know about Bluesky, Tavily, or any specific LLM
+- Adapters can be swapped without changing business logic
+- Testing is straightforward — mock any port
+
+### 2. Server-Sent Events (SSE) Streaming
+
+Instead of waiting for the full pipeline to complete, the backend streams progress events as each stage finishes. The frontend renders results progressively — post content, sources, then bullets one by one. This keeps the UI responsive during the 5-15 second pipeline execution.
+
+### 3. Cross-Encoder Reranking (ML Module)
+
+Search results from Tavily are reranked using `cross-encoder/ms-marco-MiniLM-L-6-v2`. Unlike bi-encoders that score query and document independently, cross-encoders process the (query, document) pair jointly through self-attention, producing significantly more accurate relevance judgments. Falls back to Tavily's native scoring when PyTorch is unavailable.
+
+### 4. Multi-LLM Provider Routing
+
+The LLM Router supports multiple providers (Claude, GPT-4o, Gemini) via LiteLLM's unified interface. It auto-detects which provider to use based on which API key the user provides. If a provider fails, it falls back to the next available one.
+
+### 5. Image Understanding
+
+Posts with embedded images are handled by fetching the image from Bluesky's CDN, detecting the actual MIME type from HTTP response headers, encoding as base64, and passing to a vision-capable model. The LLM sees both the text context and the visual content.
+
+### 6. Per-Request API Keys
+
+API keys are provided by the user in the frontend and sent per-request. They are never stored on the server. This avoids requiring server-side key management while allowing anyone to run the app with their own keys.
+
+## Evaluation Harness
+
+Located in `eval/`, the evaluation framework scores agent outputs using LLM-as-judge methodology based on the RAG Triad:
+
+- **Faithfulness** (0.0–1.0): Are claims grounded in retrieved context?
+- **Answer Relevance** (1–5): Does the explanation address the post's core content?
+- **Context Helpfulness** (1–5): Credibility, clarity, relevance, veracity, neutrality
+
+### Test Cases
+
+`eval/test_cases.json` contains 10 real Bluesky posts with expected outputs generated by the agent. `eval/sample_outputs.json` contains the full agent outputs (bullets, citations, model info) for each test case.
+
+Posts cover diverse topics: Ukraine/geopolitics, US politics, tech/dev, social commentary, tributes, and posts with images.
+
+### Running Evaluation
 
 ```bash
-explain https://bsky.app/profile/user.bsky.social/post/abc123
+source venv/bin/activate
+python -m eval.cli --provider anthropic/claude-sonnet-4-20250514 --output report.json
 ```
 
-### Specify a provider
+## Bonus Features
 
-```bash
-explain -p gpt-4o https://bsky.app/profile/user.bsky.social/post/abc123
-```
+| Feature | Implementation |
+|---------|---------------|
+| Image understanding | `ExplanationGeneratorAdapter.process_images()` — base64 encoding with MIME detection |
+| Multi-LLM comparison | `LiteLLMRouter` — auto-detect from key, fallback chain, explicit routing |
+| Source citations | System prompt instructs inline citations; `_extract_citations()` parses URLs from bullets |
 
-### Verbose mode (show intermediate steps)
+## Assumptions
 
-```bash
-explain -v https://bsky.app/profile/user.bsky.social/post/abc123
-```
+- Bluesky was chosen as the social platform because its AT Protocol provides unauthenticated public API access, eliminating OAuth complexity
+- The cross-encoder reranker is optional at runtime — if PyTorch/sentence-transformers aren't installed, the system falls back to Tavily's relevance scores
+- The evaluation harness uses LLM-as-judge rather than hard-coded expected outputs, since explanation quality is subjective and context-dependent
+- API keys are provided per-request to avoid server-side secret management for a demo application
 
-Verbose mode prints search results, reranking scores, and post metadata before the explanation bullets.
+## Tech Stack
 
-### Example output
-
-```
-• The post references the "Ralph Wiggum technique," a method coined by Geoffrey Huntley
-  in mid-2025 for running AI coding agents in a bash loop until tests pass [source: huntley.dev]
-• The technique is named after the Simpsons character Ralph Wiggum, known for naive
-  persistence, mirroring how the loop retries without understanding [source: reddit.com/r/programming]
-• Community reception has been mixed — some developers praise the pragmatism while others
-  warn about runaway API costs and non-deterministic outputs [source: news.ycombinator.com]
-• The method spawned derivatives including a $RALPH memecoin and variations like
-  "Ralph Wiggum TDD" that add test-writing to the loop [source: x.com/threadreader]
-```
-
-## Design Decisions
-
-### Pipeline Architecture
-
-Each stage of the pipeline (extraction, retrieval, reranking, generation) is a standalone module with well-defined interfaces. This makes components independently testable, swappable, and easy to reason about in isolation.
-
-### Cross-Encoder Reranking
-
-Search results from Tavily are reranked using `cross-encoder/ms-marco-MiniLM-L-6-v2` rather than relying on BM25 or the search engine's native scoring. Cross-encoders jointly encode query-document pairs, producing substantially more accurate relevance judgments for downstream generation quality.
-
-### Multi-Provider Fallback
-
-The LLM Router supports Claude, GPT-4o, and Gemini via LiteLLM's unified interface. If the primary provider fails (rate limits, outages), the router automatically falls back to the next available provider. This provides both resilience and the ability to compare output quality across models.
-
-### Image Understanding
-
-Posts with embedded images are handled by fetching the image from Bluesky's CDN, encoding it as base64, and passing it to a vision-capable model. This ensures explanations account for visual context that text alone cannot capture.
-
-### RAG Triad Evaluation
-
-The eval harness scores outputs on three dimensions inspired by RAG evaluation literature:
-- **Faithfulness** — ratio of claims supported by retrieved context (0.0–1.0)
-- **Answer Relevance** — how directly the explanation addresses the post (1–5)
-- **Context Helpfulness** — credibility, clarity, relevance, veracity, neutrality (1–5)
-
-This gives a structured, reproducible measure of explanation quality.
-
-## Evaluation
-
-Run the evaluation harness against curated test cases:
-
-```bash
-python -m eval.cli --provider gpt-4o --output report.json
-```
-
-This executes the agent on 10+ curated posts, scores each output with an LLM judge, and writes a JSON report with per-case and aggregate scores.
-
-## Testing
-
-### Unit tests
-
-```bash
-pytest
-```
-
-### Property-based tests only
-
-```bash
-pytest tests/test_*_property.py
-```
-
-Property-based tests use [Hypothesis](https://hypothesis.readthedocs.io/) to verify correctness properties (URL parsing round-trips, sorting invariants, score bounds, etc.) across hundreds of generated inputs.
-
-## Project Structure
-
-```
-contextual-post-explainer/
-├── src/
-│   ├── agent.py                 # Pipeline orchestrator
-│   ├── cli.py                   # CLI entry point (argparse)
-│   ├── post_extractor.py        # Bluesky URL parsing + AT Protocol
-│   ├── context_retriever.py     # Tavily search query formulation
-│   ├── reranker.py              # Cross-encoder reranking
-│   ├── explanation_generator.py # LLM bullet generation
-│   ├── llm_router.py            # Multi-provider routing via LiteLLM
-│   └── exceptions.py            # Custom exception hierarchy
-├── eval/
-│   ├── harness.py               # Evaluation orchestration
-│   ├── judge.py                 # LLM-as-judge scoring functions
-│   ├── test_cases.json          # Curated test cases
-│   └── cli.py                   # Eval CLI entry point
-├── tests/                       # Unit + property-based tests
-├── pyproject.toml
-├── .env.example
-└── README.md
-```
-
-## License
-
-MIT
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite |
+| Backend | FastAPI, Uvicorn, SSE |
+| LLM | LiteLLM (Claude, GPT-4o, Gemini) |
+| Search | Tavily API |
+| ML | sentence-transformers CrossEncoder |
+| Protocol | AT Protocol (Bluesky public AppView) |
