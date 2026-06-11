@@ -1,0 +1,185 @@
+[
+  {
+    "post_url": "https://bsky.app/profile/bsky.app/post/3mnzpiackwk25",
+    "author": "bsky.app",
+    "text": "If you're curious about group chats and haven't seen the announcement, check it out here: bsky.app/profile/bsky...",
+    "images": 0,
+    "bullets": [
+      "Bluesky launched group chat functionality on Thursday as part of app version 1.124, marking the company's shift toward focusing on community features to compete with X (formerly Twitter) (https://techcrunch.com/2026/06/11/bluesky-launches-group-chats-as-company-shifts-focus-to-community-features/)",
+      "The group chat feature allows users to interact more privately on the platform, helping Bluesky catch up with X, which recently launched a standalone XChat app to emphasize messaging capabilities (https://techcrunch.com/2026/06/11/bluesky-launches-group-chats-as-company-shifts-focus-to-community-features/)",
+      "This launch is part of Bluesky's broader community-building strategy, which also includes plans for a \"Communities\" feature similar to subreddits that will allow users to post niche content for specific audiences (https://gizmodo.com/bluesky-will-soon-have-a-communities-feature-sort-of-like-subreddits-2000767298)",
+      "The timing aligns with broader trends showing that group chats and direct messages are becoming primary connection points for younger generations, offering \"ambient connection\" that helps people feel part of something even through minimal interactions (https://www.cbsnews.com/pittsburgh/video/connection-in-group-chats-in-a-mikey-minute/)"
+    ],
+    "citations": [
+      "https://techcrunch.com/2026/06/11/bluesky-launches-group-chats-as-company-shifts-focus-to-community-features/",
+      "https://gizmodo.com/bluesky-will-soon-have-a-communities-feature-sort-of-like-subreddits-2000767298",
+      "https://www.cbsnews.com/pittsburgh/video/connection-in-group-chats-in-a-mikey-minute/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/truthspace.bsky.social/post/3mkcnenntx223",
+    "author": "truthspace.bsky.social",
+    "text": "THE MARK IS OFF. 🎯\nPRESIDENT J TRUMP TWEET ON TRUTH SOCIAL",
+    "images": 1,
+    "bullets": [
+      "Trump has been actively posting controversial content on Truth Social, including AI-generated videos and provocative imagery targeting his perceived opponents (https://ca.news.yahoo.com/trump-marks-d-day-ai-205859422.html)",
+      "The post appears to be part of Trump's pattern of using Truth Social to attack public figures, as documented in recent analyses showing he made over 800 posts in a single month dominated by various political pursuits (https://www.politico.com/news/2026/06/05/trump-social-media-analysis-00952006)",
+      "Trump has previously shared AI-generated content on Truth Social, including a video featuring artificial depictions of people from various countries chanting support for him (https://www.yahoo.com/news/politics/article/trump-posts-video-of-ai-generated-characters-from-around-the-world-chanting-they-love-donald-trump-175004159.html)",
+      "The timing coincides with Trump's broader social media activity where he has been making inflammatory posts about various topics, including recent eruptions over election results and candidate performances (https://www.thedailybeast.com/trump-melts-down-as-maga-candidates-lose-steam/)"
+    ],
+    "citations": [
+      "https://ca.news.yahoo.com/trump-marks-d-day-ai-205859422.html",
+      "https://www.politico.com/news/2026/06/05/trump-social-media-analysis-00952006",
+      "https://www.yahoo.com/news/politics/article/trump-posts-video-of-ai-generated-characters-from-around-the-world-chanting-they-love-donald-trump-175004159.html",
+      "https://www.thedailybeast.com/trump-melts-down-as-maga-candidates-lose-steam/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/maks23.bsky.social/post/3mo25zodtys27",
+    "author": "maks23.bsky.social",
+    "text": "🇺🇸🇺🇦 U.S. Senate Armed Services Committee said it voted to extend U.S. security assistance for Ukraine and increase authorized funding to $750 million, - Reuters",
+    "images": 1,
+    "bullets": [
+      "The House of Representatives recently passed a bipartisan Ukraine aid bill in a 296-195 vote, with 18 Republican lawmakers defying party leadership to support the legislation that provides $1.3 billion in security assistance and authorizes $8 billion in arms sales (https://time.com/article/2026/06/05/house-republicans-bipartisan-ukraine-support-act-aid-russia-trump/).",
+      "This represents the most robust aid package to advance in Congress in more than a year and marks the first major aid package to Ukraine during Donald Trump's second term, passing despite objections from GOP leadership (https://www.washingtonpost.com/politics/2026/06/05/house-passes-ukraine-security-aid-bill-over-objections-gop-leaders/).",
+      "The legislation only reached the House floor after six Republicans broke ranks to force a vote through a discharge petition, demonstrating significant bipartisan support that contradicts President Trump's foreign policy approach (https://www.politico.com/live-updates/2026/06/04/congress/ukraine-aid-package-passes-house-00951299).",
+      "The bill now advances to the Senate where it needs 60 votes to reach Trump's desk, setting up a potential showdown as the Senate Armed Services Committee has reportedly voted to extend and increase authorized funding to $750 million (https://www.forbes.com/sites/marktemnycky/2026/06/05/house-passes-new-ukraine-aid-bill-setting-up-senate-showdown/)."
+    ],
+    "citations": [
+      "https://time.com/article/2026/06/05/house-republicans-bipartisan-ukraine-support-act-aid-russia-trump/",
+      "https://www.washingtonpost.com/politics/2026/06/05/house-passes-ukraine-security-aid-bill-over-objections-gop-leaders/",
+      "https://www.politico.com/live-updates/2026/06/04/congress/ukraine-aid-package-passes-house-00951299",
+      "https://www.forbes.com/sites/marktemnycky/2026/06/05/house-passes-new-ukraine-aid-bill-setting-up-senate-showdown/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/kyivindependent.com/post/3mo23t6ec4k2r",
+    "author": "kyivindependent.com",
+    "text": "⚡️Ukraine confirms strike on Crimea's Armiansk bridge that hit 50 Russian military vehicles.\n\nUkraine confirmed a strike that destroyed 50 military vehicles on the Russian-occupied Armiansk bridge lin",
+    "images": 0,
+    "bullets": [
+      "Ukrainian forces conducted a confirmed strike on the Armiansk bridge connecting Russian-occupied Crimea to mainland Ukraine, destroying 50 Russian military vehicles according to the 1st Separate Assault Regiment Da Vinci (https://kyivindependent.com/ukraines-unmanned-systems-forces-continues-middle-strike-campaign-destroy-russian-air-defense-systems-military-infrastructure/).",
+      "This strike is part of Ukraine's intensified campaign targeting Russian military logistics and transportation infrastructure connecting Crimea, including recent attacks on the Chonhar Bridge that forced traffic closures (https://kyivindependent.com/ukraine-targets-key-crimea-crossing-in-broader-day-of-strikes-on-russian-military-logistics/).",
+      "The Chonhar Bridge connecting occupied Crimea with Russian-controlled southern Ukraine was previously damaged in a joint Ukrainian drone operation by Code 9.2 drone unit and 1st Separate Assault Battalion, with video footage confirming the strike (https://kyivindependent.com/drone-strike-damages-bridge-linking-occupied-crimea-to-southern-ukraine/).",
+      "Ukrainian forces have been systematically targeting multiple crossing points to Crimea, including strikes on bridges connecting to the Arabat Spit, as part of a broader strategy to disrupt Russian military supply lines in the occupied territories (https://euromaidanpress.com/2026/06/10/russia-installed-kherson-official-says-ukraine-struck-bridge-to-arabat-spit/)."
+    ],
+    "citations": [
+      "https://kyivindependent.com/ukraines-unmanned-systems-forces-continues-middle-strike-campaign-destroy-russian-air-defense-systems-military-infrastructure/",
+      "https://kyivindependent.com/ukraine-targets-key-crimea-crossing-in-broader-day-of-strikes-on-russian-military-logistics/",
+      "https://kyivindependent.com/drone-strike-damages-bridge-linking-occupied-crimea-to-southern-ukraine/",
+      "https://euromaidanpress.com/2026/06/10/russia-installed-kherson-official-says-ukraine-struck-bridge-to-arabat-spit/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/devnmei.bsky.social/post/3mo25jg4l4c2e",
+    "author": "devnmei.bsky.social",
+    "text": "He Jax on my Pomni til I Caine\n#tadc #fortnite",
+    "images": 1,
+    "bullets": [
+      "The Amazing Digital Circus characters including Jax, Pomni, and Caine are coming to Fortnite as part of a collaboration between the viral YouTube series and the popular battle royale game (https://www.polygon.com/amazing-digital-circus-fortnite-skins-announced/)",
+      "The post uses a sexual innuendo format referencing Jax, Pomni, and Caine - three main characters from The Amazing Digital Circus, which recently concluded its series run with theatrical releases that made $6.8 million on opening day (https://www.bbc.com/news/articles/cvgzgvvw158o)",
+      "The Amazing Digital Circus series finale revealed major plot developments regarding Jax's character, adding context to why fans are creating memes about these characters as they enter Fortnite (https://www.forbes.com/sites/danidiplacido/2026/06/06/amazing-digital-circus-the-last-act-the-jax-twist-explained/)",
+      "This represents a convergence of Gen Z entertainment, with the viral animated show's characters naturally fitting into Fortnite's eclectic roster despite having no connection to third-person shooters (https://www.polygon.com/amazing-digital-circus-fortnite-skins-announced/)"
+    ],
+    "citations": [
+      "https://www.polygon.com/amazing-digital-circus-fortnite-skins-announced/",
+      "https://www.bbc.com/news/articles/cvgzgvvw158o",
+      "https://www.forbes.com/sites/danidiplacido/2026/06/06/amazing-digital-circus-the-last-act-the-jax-twist-explained/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo25nmxgck2x",
+    "author": "repstansbury.bsky.social",
+    "text": "OK, let me get this straight. Congress said NO to confirming Trump’s guy who used mortgage info to go after his enemies.  And now is swapping him out for the guy Pam Bondi told us last week is “invest",
+    "images": 1,
+    "bullets": [
+      "Todd Blanche, Trump's former personal lawyer, has been serving as acting Attorney General after Pam Bondi was fired by Trump in April and has now been formally nominated for the permanent position (https://www.cnn.com/2026/06/08/politics/todd-blanche-trump-attorney-general-nomination).",
+      "Former Attorney General Pam Bondi told Congress in a closed-door interview that Todd Blanche was \"in charge\" of the Justice Department's handling of the Jeffrey Epstein files, including responsibility for their \"entire release\" which has been described as delayed and incomplete (https://www.theguardian.com/us-news/2026/jun/04/pam-bondi-epstein-transcript).",
+      "Blanche faces skepticism from several Republican senators ahead of his confirmation battle, with concerns raised specifically over the administration's proposed anti-weaponization fund (https://www.newsweek.com/gop-senators-most-likely-to-vote-against-todd-blanche-for-attorney-general-12062192).",
+      "The post appears to reference a previous Trump nominee who was rejected by Congress, contrasting that rejection with the current nomination of Blanche, who Bondi has implicated in the controversial Epstein files investigation."
+    ],
+    "citations": [
+      "https://www.cnn.com/2026/06/08/politics/todd-blanche-trump-attorney-general-nomination",
+      "https://www.theguardian.com/us-news/2026/jun/04/pam-bondi-epstein-transcript",
+      "https://www.newsweek.com/gop-senators-most-likely-to-vote-against-todd-blanche-for-attorney-general-12062192"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/repstansbury.bsky.social/post/3mo24ctdh6s2n",
+    "author": "repstansbury.bsky.social",
+    "text": "Epstein is still paying the legal fees of witnesses in this case—including his assistant Lesley Groff, who we interviewed in @oversightdemocrats.bsky.social this week.\n\nWe know paying legal fees was o",
+    "images": 0,
+    "bullets": [
+      "Representative Stansbury's post references congressional testimony from Lesley Groff, Jeffrey Epstein's longtime personal assistant who worked for him for nearly 20 years starting in 2001, and who recently testified before the House Oversight Committee (https://www.theguardian.com/us-news/2026/jun/09/jeffrey-epstein-assistant-lesley-groff-testifies).",
+      "During her testimony, Groff claimed she had a \"strictly business\" relationship with Epstein despite scheduling \"daily\" massages for him with young women, and she denied knowing about his crimes (https://nypost.com/2026/06/09/us-news/ex-epstein-assistant-lesley-groff-relied-on-physical-assistance-to-face-questioning-before-the-house-oversight-committee/).",
+      "The House Oversight Committee's investigation has expanded to include other high-profile figures, with plans to seek testimony from Alan Dershowitz, Epstein's former attorney, and Bill Gates also testifying about his relationship with Epstein (https://www.theguardian.com/us-news/2026/jun/10/alan-dershowitz-epstein-house-panel).",
+      "Groff appeared visibly emotional during her Capitol Hill appearance and required physical assistance from two escorts to enter the hearing room, suggesting the significant stress of the proceedings (https://nypost.com/2026/06/09/us-news/ex-epstein-assistant-lesley-groff-relied-on-physical-assistance-to-face-questioning-before-the-house-oversight-committee/)."
+    ],
+    "citations": [
+      "https://www.theguardian.com/us-news/2026/jun/09/jeffrey-epstein-assistant-lesley-groff-testifies",
+      "https://nypost.com/2026/06/09/us-news/ex-epstein-assistant-lesley-groff-relied-on-physical-assistance-to-face-questioning-before-the-house-oversight-committee/",
+      "https://www.theguardian.com/us-news/2026/jun/10/alan-dershowitz-epstein-house-panel"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/laurenmeidasa.bsky.social/post/3mo24jk7u4c2b",
+    "author": "laurenmeidasa.bsky.social",
+    "text": "Democrats to call on Vance to testify to House committee over Epstein files\n\nPlan comes after major New York Times report alleges files became source of crisis within Trump administration\n\nwww.theguar",
+    "images": 0,
+    "bullets": [
+      "Democrats on the House oversight committee, led by Representative Robert Garcia, are planning to call on JD Vance to testify about the Trump administration's handling of the Epstein files (https://www.theguardian.com/us-news/2026/jun/11/vance-epstein-files-testify-house-democrats).",
+      "A major New York Times report revealed that the Epstein files became the source of an internal crisis within Trump's White House, with top officials scrambling in secret meetings and fearing backlash from their own political base (https://www.newsweek.com/epstein-files-update-key-revelations-major-report-donald-trump-white-house-12055753).",
+      "Vice President JD Vance participated in a White House Situation Room meeting on July 17 alongside other senior officials to discuss how to respond to public outcry over a Justice Department-FBI memo claiming \"no further disclosure\" of Epstein documents was warranted (https://nypost.com/2026/06/10/us-news/jeffrey-epstein-panic-sparked-bizarre-brainstorming-session-in-situation-room-book-says/).",
+      "The crisis involved senior officials clashing in a series of meetings as they struggled to manage the fallout from President Trump's refusal to release the Epstein documents (https://www.nytimes.com/2026/06/10/magazine/epstein-files-trump-white-house-takeaways.html)."
+    ],
+    "citations": [
+      "https://www.theguardian.com/us-news/2026/jun/11/vance-epstein-files-testify-house-democrats",
+      "https://www.newsweek.com/epstein-files-update-key-revelations-major-report-donald-trump-white-house-12055753",
+      "https://nypost.com/2026/06/10/us-news/jeffrey-epstein-panic-sparked-bizarre-brainstorming-session-in-situation-room-book-says/",
+      "https://www.nytimes.com/2026/06/10/magazine/epstein-files-trump-white-house-takeaways.html"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/wolvendamien.bsky.social/post/3mo25cb345c25",
+    "author": "wolvendamien.bsky.social",
+    "text": "Jane Yolen books in my elementary and middle school library literally changed the shape of my brain; first her Pit Dragon Chronicles, but then also her edited 'Werewolves: A Collection of Original Sto",
+    "images": 0,
+    "bullets": [
+      "Jane Yolen was a prolific author of children's and young adult fantasy literature who passed away at age 87, known particularly for works like the Pit Dragon Chronicles and editing anthologies such as \"Werewolves: A Collection of Original Stories.\"",
+      "The post reflects on how children's books, particularly fantasy literature, can have profound developmental impact during formative years, with research showing that early life experiences including literary exposure can have long-term cognitive consequences that persist into adolescence (https://neurosciencenews.com/early-diet-adolescent-intelligence-30839/).",
+      "The mention of books \"changing the shape of my brain\" aligns with broader discussions about how reading provides crucial developmental benefits for young people, offering respite from modern pressures and helping slow down the accelerated pace of childhood in the digital age (https://www.publishersweekly.com/pw/by-topic/childrens/childrens-industry-news/article/100585-a-publisher-asks-are-girls-being-pushed-to-grow-up-too-soon.html).",
+      "The tribute highlights concerns about maintaining literary culture for young readers, as educators and publishers worry about raising a generation with diminished access to the transformative power of books during critical developmental periods (https://www.theguardian.com/books/2026/jun/08/a-british-childhood-by-frank-cottrell-boyce-review-are-we-raising-a-bookless-generation)."
+    ],
+    "citations": [
+      "https://neurosciencenews.com/early-diet-adolescent-intelligence-30839/",
+      "https://www.publishersweekly.com/pw/by-topic/childrens/childrens-industry-news/article/100585-a-publisher-asks-are-girls-being-pushed-to-grow-up-too-soon.html",
+      "https://www.theguardian.com/books/2026/jun/08/a-british-childhood-by-frank-cottrell-boyce-review-are-we-raising-a-bookless-generation"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  },
+  {
+    "post_url": "https://bsky.app/profile/lynnplourde.bsky.social/post/3mo245c2zmc24",
+    "author": "lynnplourde.bsky.social",
+    "text": "Jane Yolen has passed...450 books...the matriarch of children's books...what a gift she was and will continue to be as her books and legacy will live on forever. 🫂💔",
+    "images": 1,
+    "bullets": [
+      "Jane Yolen was an extraordinarily prolific children's book author who published her 450th book this year, establishing her as one of the most productive writers in the field (based on the Facebook post confirmation from her daughter Heidi Stemple)",
+      "Yolen received 6 honorary doctorates and numerous awards throughout her career, recognition that underscores her significant contributions to children's literature (based on the Facebook post from her daughter)",
+      "She was known for mentoring and nurturing other authors and illustrators both through her published works and personal guidance, making her influence extend beyond her own writing (based on the Facebook post from her daughter)",
+      "Yolen passed away peacefully without pain or stress, with her son Adam's music playing and her daughter reading \"Owl Moon\" to her one last time, while her son Jason was also present (based on the Facebook post from her daughter)",
+      "The timing of her death comes during a challenging period for the publishing industry, where writers face low wages and corporate consolidation continues to affect the book world (https://lithub.com/maris-kreizmans-best-of-books-of-2026-so-far/)"
+    ],
+    "citations": [
+      "https://lithub.com/maris-kreizmans-best-of-books-of-2026-so-far/"
+    ],
+    "model_used": "claude-sonnet-4-20250514"
+  }
+]
