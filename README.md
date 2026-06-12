@@ -121,8 +121,9 @@ src/
 └── entrypoints/         # Interface layer
     ├── api.py           # FastAPI + Server-Sent Events streaming
     └── cli.py           # CLI interface
+tests/                   # Unit tests (pytest)
 frontend/                # React (Vite + TypeScript)
-eval/                    # Evaluation harness
+eval/                    # Evaluation harness (test cases, judge, harness, reports)
 ```
 
 The FastAPI backend streams results to the React frontend via Server-Sent Events (SSE), providing progressive updates at each pipeline stage.
@@ -142,7 +143,12 @@ Instead of waiting for the full pipeline to complete, the backend streams progre
 
 ### 3. Query Rewriting (Retrieval Quality)
 
-Social media posts are conversational and full of slang, making them poor search queries. Before searching, the post is rewritten into 1-3 focused queries that extract key entities and topics. For example, "Jane Yolen has passed...450 books...the matriarch of children's books" becomes `["Jane Yolen children's author obituary", "Jane Yolen 450 books career"]`. Combined with Tavily's `general` topic (instead of `news`), this dramatically improves retrieval relevance for niche and non-news posts.
+Social media posts are conversational, so using the raw text as a search query retrieves poor results. Before searching, the post is rewritten into 1-3 focused queries that extract the key entities and topic. Two concrete changes drive the improvement:
+
+1. **Rewriting** — e.g. the post *"Jane Yolen has passed...450 books...the matriarch of children's books"* is turned into entity-focused queries like `["Jane Yolen children's author obituary", "Jane Yolen 450 books career"]`.
+2. **Search topic** — Tavily is queried with `topic="general"` instead of `topic="news"`, so encyclopedic sources (e.g. Wikipedia) are included, not only journalism.
+
+The measured impact is in the table below: faithfulness rises from 0.77 (no rewriting) to 0.84, with the largest gains on niche, non-news posts (a Jane Yolen tribute went from 0.0 to 0.90).
 
 Two interchangeable rewriter adapters are provided (same `QueryRewriter` interface, swappable via the hexagonal architecture):
 
@@ -234,16 +240,16 @@ Query rewriting is a high-volume, low-complexity step — one call per request, 
 
 The hexagonal architecture makes this swap trivial — it's a new adapter implementing the same `QueryRewriter` interface, with zero changes to the use case.
 
-### Deploying the local model on AWS
+### Deploying the local model
 
-The local rewriter (`Qwen2.5-0.5B-Instruct`) is small and CPU-friendly, so it has several AWS paths:
+The local rewriter (`Qwen2.5-0.5B-Instruct`) is small and CPU-friendly, so it fits several deployment models:
 
 | Option | How | When |
 |--------|-----|------|
-| **EC2 / ECS Fargate / EKS** | Run the current container as-is; model loads in-process on a `c7g` (Graviton) or `c6i` CPU instance. Model weights baked into the image or mounted via EFS. | Lift-and-shift, full control, data stays in your VPC |
-| **SageMaker real-time endpoint** | Host the model as a managed endpoint; the rewriter adapter calls the endpoint instead of loading in-process | Managed scaling/versioning without self-managing inference servers |
-| **Amazon Bedrock (small model)** | Replace self-hosting with a managed small model (Nova Micro/Lite, Claude Haiku) | AWS-native, least ops — recommended for most cases |
+| **Self-hosted in-process** | The model loads inside the API container on a CPU instance (weights baked into the image or mounted from shared storage) | Lift-and-shift, full control, data stays in your environment |
+| **Managed inference endpoint** | Host the model behind a dedicated inference service; the rewriter adapter calls it over HTTP instead of loading in-process | Independent scaling/versioning without managing inference servers yourself |
+| **Managed small model (API)** | Replace self-hosting with a provider's small managed model (e.g. a Haiku/Nano-class model) | Least ops — recommended for most cases |
 
-**Recommendation for AWS production:** rather than self-hosting Qwen, use **Bedrock with a small managed model** (e.g. Nova Micro). Same principle (cheap model for a trivial task) with no inference infrastructure to operate, automatic scaling, and very low per-token cost. Self-hosting on EC2/ECS only wins at very high, constant volume — or when data residency requires inference inside your own environment.
+**Recommendation:** rather than self-hosting, use a **managed small model** — same principle (a cheap model for a trivial task) with no inference infrastructure to operate and low per-token cost. Self-hosting only wins at very high constant volume, or when data residency requires inference inside your own environment.
 
 In all cases, only the injected adapter changes; the domain use case is untouched.
